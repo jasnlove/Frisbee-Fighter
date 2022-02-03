@@ -1,45 +1,59 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
     public float speed = 3.0f;
     public float launchSpeed = 6.0f;
     public GameObject discPrefab;
 
-    Rigidbody2D body;
-    float horizontal;
-    float vertical;
+    private Rigidbody2D body;
+
+    private InputActionMap map;
+    private InputAction movement;
+    private InputAction disc;
+    private Vector2 input;
+
+    private void Awake()
+    {
+        map = GetComponent<PlayerInput>().currentActionMap;
+        body = GetComponent<Rigidbody2D>();
+        movement = map.FindAction("Movement");
+        disc = map.FindAction("Toss");
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        body = GetComponent<Rigidbody2D>();
+        disc.performed += ThrowDisc;
     }
 
     // Update is called once per frame
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            Debug.Log("Throw disc");
-            Vector2 launchDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            launchDirection.Normalize();
-            GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
-            DiscController disc = discObject.GetComponent<DiscController>();
-            disc.Launch(launchDirection, launchSpeed);
-        }
+        Debug.Log("reading");
+        input = movement.ReadValue<Vector2>();
     }
 
     void FixedUpdate()
     {
-        //Vector2 position = transform.position;
-        Vector2 move = new Vector2(horizontal, vertical);
-        move = Vector2.ClampMagnitude(move, 1f);
-        body.MovePosition(body.position + speed * move * Time.deltaTime);
+        Move(input);
+    }
+
+    private void Move(Vector2 input)
+    {
+        input = Vector2.ClampMagnitude(input, 1f);
+        body.MovePosition(body.position + speed * input * Time.deltaTime);
+    }
+
+    private void ThrowDisc(InputAction.CallbackContext context)
+    {
+        Debug.Log("Throw disc");
+        Vector2 launchDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
+        DiscController disc = discObject.GetComponent<DiscController>();
+        disc.Launch(launchDirection, launchSpeed);
     }
 }
