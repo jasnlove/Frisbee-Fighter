@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
 
     private void ThrowDisc(InputAction.CallbackContext context)
     {
+        //The logic in this function can just be shoved into the disc controller to control its movements.
+        //Ill probably move it tomorrow or something. Sorry for being too proactive lol I just like coding games, I'll try to avoid stealing work too often.
+        //CastReflectingRay();
+
         if (discHeld)
         {
             Vector2 launchDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
