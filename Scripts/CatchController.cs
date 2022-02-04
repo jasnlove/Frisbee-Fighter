@@ -30,7 +30,7 @@ public class CatchController : MonoBehaviour
     //This just goes around collisions and checks another way
     private void CheckForDisc()
     {
-        Collider2D col = Physics2D.OverlapCircle(transform.position, Mathf.Max(transform.localScale.x, transform.localScale.y), discLayer);
+        Collider2D col = Physics2D.OverlapBox(transform.position, transform.localScale, discLayer);
         if (!col) return;
         DiscController disc = col.GetComponent<DiscController>();
         if(disc && disc.pickupReady)
