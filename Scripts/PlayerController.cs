@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D body;
 
     private InputActionMap map;
+    private InputAction mousePos;
     private InputAction movement;
     private InputAction toss;
     private Vector2 input;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         movement = map.FindAction("Movement");
         toss = map.FindAction("Toss");
+        mousePos = map.FindAction("MousePosition");
     }
 
     // Start is called before the first frame update
@@ -52,7 +54,7 @@ public class PlayerController : MonoBehaviour
     //Rewrote throw just to include the new input system instead of a flag for disc held
     private void ThrowDisc(InputAction.CallbackContext context)
     {
-        Vector2 launchDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        Vector2 launchDirection = Camera.main.ScreenToWorldPoint(mousePos.ReadValue<Vector2>()) - transform.position;
         launchDirection.Normalize();
         GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
         DiscController disc = discObject.GetComponent<DiscController>();
