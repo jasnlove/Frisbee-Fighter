@@ -12,7 +12,7 @@ public class CatchController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = gameObject.GetComponentInParent<PlayerController>();44
+        player = gameObject.GetComponentInParent<PlayerController>();
         //catchDelayTimer = catchDelay;
     }
 
