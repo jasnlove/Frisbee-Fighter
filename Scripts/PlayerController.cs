@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
         launchDirection.Normalize();
         GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
         DiscController disc = discObject.GetComponent<DiscController>();
-        disc.Launch(launchDirection, tossDistance, launchSpeed, collisionLayer);
+        disc.Launch(launchDirection, launchSpeed, collisionLayer);
         toss.performed -= ThrowDisc;
     }
 
