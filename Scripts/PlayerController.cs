@@ -5,9 +5,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 3.0f;
-    public float launchSpeed = 6.0f;
-    public GameObject discPrefab;
+    [SerializeField] private float speed = 3.0f;
+    [SerializeField] private float launchSpeed = 6.0f;
+    [SerializeField] private float tossDistance = 10.0f;
+    [SerializeField] private LayerMask collisionLayer = 3;
+    [SerializeField] private GameObject discPrefab;
 
     private Rigidbody2D body;
 
@@ -49,9 +51,38 @@ public class PlayerController : MonoBehaviour
 
     private void ThrowDisc(InputAction.CallbackContext context)
     {
+        //The logic in this function can just be shoved into the disc controller to control its movements.
+        //Ill probably move it tomorrow or something. Sorry for being too proactive lol I just like coding games, I'll try to avoid stealing work too often.
+        //CastReflectingRay();
+
         Vector2 launchDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
         DiscController disc = discObject.GetComponent<DiscController>();
         disc.Launch(launchDirection, launchSpeed);
+    }
+
+    private void CastReflectingRay()
+    {
+        float distanceTossed = 0;
+        Vector2 launchDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        Vector3 startPoint = transform.position;
+        int iterations = 0;
+        while (distanceTossed < tossDistance && iterations < 10)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(startPoint, launchDirection, tossDistance, collisionLayer);
+            if (hit)
+            {
+                Debug.DrawLine(startPoint, hit.point, Color.red, 2);
+                distanceTossed += hit.distance;
+                launchDirection = Vector2.Reflect(launchDirection, hit.normal);
+                startPoint = hit.point + launchDirection * 0.1f;
+            }
+            else
+            {
+                Debug.DrawLine(startPoint, startPoint + (Vector3)launchDirection * tossDistance, Color.red, 2);
+                distanceTossed = tossDistance;
+            }
+            iterations++;
+        }
     }
 }
