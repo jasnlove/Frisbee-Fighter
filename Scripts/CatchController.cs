@@ -30,13 +30,16 @@ public class CatchController : MonoBehaviour
     //This just goes around collisions and checks another way
     private void CheckForDisc()
     {
-        Collider2D col = Physics2D.OverlapBox(transform.position, transform.localScale, discLayer);
-        if (!col) return;
-        DiscController disc = col.GetComponent<DiscController>();
-        if(disc && disc.pickupReady)
+        Collider2D[] col = Physics2D.OverlapBoxAll(transform.position, transform.localScale, discLayer);
+        foreach(Collider2D c in col)
         {
-            player.PickupDisc();
-            Destroy(disc.gameObject);
+            DiscController disc = c.GetComponent<DiscController>();
+            if (disc && disc.pickupReady)
+            {
+                player.PickupDisc();
+                Destroy(disc.gameObject);
+                break;
+            }
         }
     }
 
