@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private InputAction disc;
     private Vector2 input;
 
+    bool discHeld = true;
+
     private void Awake()
     {
         map = GetComponent<PlayerInput>().currentActionMap;
@@ -49,9 +51,19 @@ public class PlayerController : MonoBehaviour
 
     private void ThrowDisc(InputAction.CallbackContext context)
     {
-        Vector2 launchDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
-        GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
-        DiscController disc = discObject.GetComponent<DiscController>();
-        disc.Launch(launchDirection, launchSpeed);
+        if (discHeld)
+        {
+            Vector2 launchDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            launchDirection.Normalize();
+            GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
+            DiscController disc = discObject.GetComponent<DiscController>();
+            disc.Launch(launchDirection, launchSpeed);
+            discHeld = false;
+        }
+    }
+
+    public void PickupDisc()
+    {
+        discHeld = true;
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class DiscController : MonoBehaviour
 {
     Rigidbody2D body;
+    float decelSpeed = -0.8f;
 
     private void Awake()
     {
@@ -11,7 +12,13 @@ public class DiscController : MonoBehaviour
 
     private void Update()
     {
+        
+    }
 
+    private void FixedUpdate()
+    {
+        body.AddForce(body.velocity * decelSpeed);
+        decelSpeed -= 0.01f;
     }
 
     public void Launch(Vector2 direction, float speed)
