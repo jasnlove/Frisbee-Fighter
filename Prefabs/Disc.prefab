@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5802557447273228178}
   - component: {fileID: 4706029632775406751}
   - component: {fileID: 2299367997347710350}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Disc
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f730bb474a9a70247bd4d2b82d11da0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupReady: 0
 --- !u!50 &4706029632775406751
 Rigidbody2D:
   serializedVersion: 4

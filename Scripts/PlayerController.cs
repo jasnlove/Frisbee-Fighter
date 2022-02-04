@@ -15,23 +15,21 @@ public class PlayerController : MonoBehaviour
 
     private InputActionMap map;
     private InputAction movement;
-    private InputAction disc;
+    private InputAction toss;
     private Vector2 input;
-
-    bool discHeld = true;
 
     private void Awake()
     {
         map = GetComponent<PlayerInput>().currentActionMap;
         body = GetComponent<Rigidbody2D>();
         movement = map.FindAction("Movement");
-        disc = map.FindAction("Toss");
+        toss = map.FindAction("Toss");
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        disc.performed += ThrowDisc;
+        toss.performed += ThrowDisc;
     }
 
     // Update is called once per frame
@@ -51,50 +49,19 @@ public class PlayerController : MonoBehaviour
         body.MovePosition(body.position + speed * input * Time.deltaTime);
     }
 
+    //Rewrote throw just to include the new input system instead of a flag for disc held
     private void ThrowDisc(InputAction.CallbackContext context)
     {
-        //The logic in this function can just be shoved into the disc controller to control its movements.
-        //Ill probably move it tomorrow or something. Sorry for being too proactive lol I just like coding games, I'll try to avoid stealing work too often.
-        //CastReflectingRay();
-
-        if (discHeld)
-        {
-            Vector2 launchDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-            launchDirection.Normalize();
-            GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
-            DiscController disc = discObject.GetComponent<DiscController>();
-            disc.Launch(launchDirection, launchSpeed);
-            discHeld = false;
-        }
-    }
-
-    private void CastReflectingRay()
-    {
-        float distanceTossed = 0;
-        Vector2 launchDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
-        Vector3 startPoint = transform.position;
-        int iterations = 0;
-        while (distanceTossed < tossDistance && iterations < 10)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(startPoint, launchDirection, tossDistance, collisionLayer);
-            if (hit)
-            {
-                Debug.DrawLine(startPoint, hit.point, Color.red, 2);
-                distanceTossed += hit.distance;
-                launchDirection = Vector2.Reflect(launchDirection, hit.normal);
-                startPoint = hit.point + launchDirection * 0.1f;
-            }
-            else
-            {
-                Debug.DrawLine(startPoint, startPoint + (Vector3)launchDirection * tossDistance, Color.red, 2);
-                distanceTossed = tossDistance;
-            }
-            iterations++;
-        }
+        Vector2 launchDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+        launchDirection.Normalize();
+        GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
+        DiscController disc = discObject.GetComponent<DiscController>();
+        disc.Launch(launchDirection, tossDistance, launchSpeed, collisionLayer);
+        toss.performed -= ThrowDisc;
     }
 
     public void PickupDisc()
     {
-        discHeld = true;
+        toss.performed += ThrowDisc;
     }
 }
