@@ -6,56 +6,41 @@ public class DiscController : MonoBehaviour
 {
     public bool pickupReady = false;
     private Rigidbody2D body;
-    //private float decelSpeed = -0.8f;
+    private float decelSpeed = -0.8f;
 
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    public void Launch(Vector2 direction, float speed, int collisionLayer)
     {
-        
+        body.velocity = (direction * speed);
+        StartCoroutine(TestLaunch(direction, collisionLayer));
     }
 
-    private void FixedUpdate()
-    {
-        //body.AddForce(body.velocity * decelSpeed);
-        //decelSpeed -= 0.01f;
-    }
-
-    public void Launch(Vector2 direction, float speed, float distance, int collisionLayer)
-    {
-        //body.velocity = (direction * speed);
-        StartCoroutine(TestLaunch(direction, distance, speed, collisionLayer));
-    }
-
-    //Ran into issues using OnCollisionEnter with clipping and whatnot. Ended up writing this
-    //It also allows us to more easily set when a disc is ready to grab, rather than just using an abritrary timer.
+    //It also allows us to more easily set when a disc is ready to grab
     //Commented it out for easy understanding.
-    public IEnumerator TestLaunch(Vector2 direction, float distance, float speed, int collisionLayer)
+    public IEnumerator TestLaunch(Vector2 direction, int collisionLayer)
     {
-        float distanceTossed = 0;
         Vector2 launchDirection = direction;
-        int iterations = 0;
-        int maxIterations = 50;
         float radius = Mathf.Max(transform.localScale.x, transform.localScale.y);
-        while (distanceTossed < distance && iterations < maxIterations)
+        int iterations = 0;
+        int maxIterations = 150;
+        while (body.velocity.magnitude > Mathf.Epsilon && iterations < maxIterations)
         {
             yield return new WaitForFixedUpdate();
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, radius * 1.05f, launchDirection, 0.0f, collisionLayer);//Checks a circle direction on the player for collisions
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, radius * 1.05f, Vector2.zero, 0.0f, collisionLayer);//Checks a circle direction on the player for collisions
             if (hit) //If the disc hits something, reflect the direction
             {
-                distanceTossed += speed * Time.fixedDeltaTime;
-                launchDirection = Vector3.Reflect(launchDirection, hit.normal);
-                body.MovePosition(body.position + launchDirection * speed * Time.fixedDeltaTime); //Creates slight separation from where it hits, to ensure no clipping happens
+                Debug.Log(body.velocity);
+                body.velocity = Vector3.Reflect(body.velocity, hit.normal);
+                Debug.Log(body.velocity);
                 pickupReady = true; //Player can only pick it up after it has hit a wall
             }
-            else //Otherwise just move it forward
-            {
-                body.MovePosition(body.position + launchDirection * speed * Time.fixedDeltaTime);
-                distanceTossed += speed * Time.fixedDeltaTime;
-            }
+            body.AddForce(body.velocity * decelSpeed);
+            decelSpeed -= 0.01f;
+            iterations++;
         }
         pickupReady = true; //Player can also pick it up after it stops moving
     }
