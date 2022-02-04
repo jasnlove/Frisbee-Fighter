@@ -25,19 +25,18 @@ public class PlayerController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         disc.performed += ThrowDisc;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        Debug.Log("reading");
         input = movement.ReadValue<Vector2>();
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Move(input);
     }
@@ -50,7 +49,6 @@ public class PlayerController : MonoBehaviour
 
     private void ThrowDisc(InputAction.CallbackContext context)
     {
-        Debug.Log("Throw disc");
         Vector2 launchDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
         DiscController disc = discObject.GetComponent<DiscController>();
