@@ -33,9 +33,7 @@ public class DiscController : MonoBehaviour
             RaycastHit2D hit = Physics2D.CircleCast(transform.position, radius * 1.05f, Vector2.zero, 0.0f, collisionLayer);//Checks a circle direction on the player for collisions
             if (hit) //If the disc hits something, reflect the direction
             {
-                Debug.Log(body.velocity);
                 body.velocity = Vector3.Reflect(body.velocity, hit.normal);
-                Debug.Log(body.velocity);
                 pickupReady = true; //Player can only pick it up after it has hit a wall
             }
             body.AddForce(body.velocity * decelSpeed);

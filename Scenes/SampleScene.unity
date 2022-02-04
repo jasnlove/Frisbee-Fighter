@@ -340,11 +340,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5272338061589321685, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
       propertyPath: launchSpeed
-      value: 100
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5272338061589321685, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
       propertyPath: tossDistance
-      value: 50
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 5272338061589321686, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
       propertyPath: m_Name
