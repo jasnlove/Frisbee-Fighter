@@ -25,6 +25,7 @@ public class CatchController : MonoBehaviour
         CheckForDisc();
     }
 
+    //This could also likely just go into PlayerController if you don't care about separating behaviors
     //Wrote this because disabling collision to the player disallowed the player from grabbing it.
     //This just goes around collisions and checks another way
     private void CheckForDisc()
