@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using States;
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -7,9 +8,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float launchSpeed = 6.0f;
-    [SerializeField] private float tossDistance = 10.0f;
-    [SerializeField] private LayerMask collisionLayer = 3;
     [SerializeField] private GameObject discPrefab;
+    [SerializeField] private LayerMask discLayer;
+    [SerializeField] private LayerMask collisionLayer = 3;
 
     private Rigidbody2D body;
 
@@ -17,7 +18,11 @@ public class PlayerController : MonoBehaviour
     private InputAction mousePos;
     private InputAction movement;
     private InputAction toss;
+
     private Vector2 input;
+
+    private StateMachine stateMachine;
+    public enum PlayerStates { HasDisc, NoDisc};
 
     private void Awake()
     {
@@ -26,17 +31,23 @@ public class PlayerController : MonoBehaviour
         movement = map.FindAction("Movement");
         toss = map.FindAction("Toss");
         mousePos = map.FindAction("MousePosition");
-    }
 
-    // Start is called before the first frame update
-    private void Start()
-    {
-        toss.performed += ThrowDisc;
+        stateMachine = new StateMachineBuilder()
+            .WithState(PlayerStates.HasDisc.ToString())
+            .WithOnEnter( () => toss.performed += ThrowDisc)
+            .WithOnExit( () => toss.performed -= ThrowDisc)
+            .WithTransition(PlayerStates.NoDisc.ToString(), () => { return toss.triggered; })
+
+            .WithState(PlayerStates.NoDisc.ToString())
+            .WithTransition(PlayerStates.HasDisc.ToString(), () => { return CheckForDisc(); })
+
+            .Build();
     }
 
     // Update is called once per frame
     private void Update()
     {
+        stateMachine.RunStateMachine();
         input = movement.ReadValue<Vector2>();
     }
 
@@ -59,11 +70,20 @@ public class PlayerController : MonoBehaviour
         GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
         DiscController disc = discObject.GetComponent<DiscController>();
         disc.Launch(launchDirection, launchSpeed, collisionLayer);
-        toss.performed -= ThrowDisc;
     }
 
-    public void PickupDisc()
+    private bool CheckForDisc()
     {
-        toss.performed += ThrowDisc;
+        Collider2D[] col = Physics2D.OverlapBoxAll(transform.position, transform.localScale, discLayer);
+        foreach (Collider2D c in col)
+        {
+            DiscController disc = c.GetComponent<DiscController>();
+            if (disc && disc.pickupReady)
+            {
+                Destroy(disc.gameObject);
+                return true;
+            }
+        }
+        return false;
     }
 }

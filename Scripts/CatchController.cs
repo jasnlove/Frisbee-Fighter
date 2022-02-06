@@ -22,26 +22,12 @@ public class CatchController : MonoBehaviour
         //catchDelayTimer -= Time.deltaTime;
         //if (catchDelayTimer < 0)
         //catchReady = true;
-        CheckForDisc();
     }
 
     //This could also likely just go into PlayerController if you don't care about separating behaviors
     //Wrote this because disabling collision to the player disallowed the player from grabbing it.
     //This just goes around collisions and checks another way
-    private void CheckForDisc()
-    {
-        Collider2D[] col = Physics2D.OverlapBoxAll(transform.position, transform.localScale, discLayer);
-        foreach(Collider2D c in col)
-        {
-            DiscController disc = c.GetComponent<DiscController>();
-            if (disc && disc.pickupReady)
-            {
-                player.PickupDisc();
-                Destroy(disc.gameObject);
-                break;
-            }
-        }
-    }
+    
 
 
     /*void OnTriggerEnter2D(Collider2D other)
