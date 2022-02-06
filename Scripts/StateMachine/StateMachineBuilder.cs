@@ -4,9 +4,30 @@ using System.Linq;
 
 namespace States
 {
+
+    /* How to use:
+     * 
+     * Start with a StateMachine x = new StateMachineBuilder()
+     * Define a state using .WithState( stateName : string)
+     * Define the states actions using .WithOnEnter, .WithOnRun, .WithOnExit
+     * Define the states transition(s) using .WithTransition(nextState : string, Func<bool>)
+     * Defining transitions for states that don't exist will not error, but will just produce nothing
+     * Continue this pattern, define the next state with .WithState... and do this until there are no more states.
+     * call .Build()
+     * EXAMPLE:
+     *             StateMachine x = new StateMachineBuilder()
+     *                          .WithState("X")
+     *                          .WithOnEnter( () => { foo(); } )
+     *                          .WithTransition("Y", () => { return bar(); } )
+     *                          .WithState("Y")
+     *                          .WithOnEnter( () => { foobar(); } )
+     *                          .Build()
+     */
+
+
+
     public class StateMachineBuilder
     {
-        private StateMachine sm;
         private readonly List<string> _states = new List<string>();
         private readonly Dictionary<string, Action> _onEnter = new Dictionary<string, Action>();
         private readonly Dictionary<string, Action> _onExit = new Dictionary<string, Action>();

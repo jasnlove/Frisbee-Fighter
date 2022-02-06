@@ -339,12 +339,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5272338061589321685, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
-      propertyPath: launchSpeed
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5272338061589321685, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
-      propertyPath: tossDistance
-      value: 25
+      propertyPath: discLayer.m_Bits
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 5272338061589321686, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
       propertyPath: m_Name

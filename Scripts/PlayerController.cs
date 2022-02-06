@@ -22,7 +22,10 @@ public class PlayerController : MonoBehaviour
     private Vector2 input;
 
     private StateMachine stateMachine;
-    public enum PlayerStates { HasDisc, NoDisc};
+    public static class PlayerStates {
+        public const string HasDisc = "HasDisc";
+        public const string NoDisc = "NoDisc";
+    };
 
     private void Awake()
     {
@@ -32,14 +35,15 @@ public class PlayerController : MonoBehaviour
         toss = map.FindAction("Toss");
         mousePos = map.FindAction("MousePosition");
 
+        //See documentation in statemachine folder
         stateMachine = new StateMachineBuilder()
-            .WithState(PlayerStates.HasDisc.ToString())
+            .WithState(PlayerStates.HasDisc)
             .WithOnEnter( () => toss.performed += ThrowDisc)
             .WithOnExit( () => toss.performed -= ThrowDisc)
-            .WithTransition(PlayerStates.NoDisc.ToString(), () => { return toss.triggered; })
+            .WithTransition(PlayerStates.NoDisc, () => { return toss.triggered; })
 
-            .WithState(PlayerStates.NoDisc.ToString())
-            .WithTransition(PlayerStates.HasDisc.ToString(), () => { return CheckForDisc(); })
+            .WithState(PlayerStates.NoDisc)
+            .WithTransition(PlayerStates.HasDisc, () => { return CheckForDisc(); })
 
             .Build();
     }

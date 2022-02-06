@@ -2,6 +2,12 @@ using System;
 
 namespace States
 {
+    /* How to use:
+     * 
+     * Nothing here is that crazy, it just stores logic and a state.
+     * 
+     */
+
     public class Transition
     {
         public State NextState { get; private set; }

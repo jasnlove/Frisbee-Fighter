@@ -3,8 +3,17 @@ using System.Collections.Generic;
 
 namespace States
 {
+    /* How to use:
+     * 
+     * The only thing you need to really know, outside of how to construct it
+     * is that the transitions list is order-important, so order things in terms
+     * of their importance.
+     * 
+     */
+
     public class State
     {
+
         public string Name { get; private set; }
         private Action enterState;
         private Action exitState;
@@ -42,7 +51,7 @@ namespace States
             duringState?.Invoke();
         }
 
-        public State QueryStateChange()
+        public State QueryStateChange() //Queries all transitions attached to this state, if any func<bool> result in true, the first one found is returned
         {
             foreach(Transition t in transitions)
             {
