@@ -26,7 +26,7 @@ public class DiscController : MonoBehaviour
         Vector2 launchDirection = direction;
         float radius = Mathf.Max(transform.localScale.x, transform.localScale.y);
         int iterations = 0;
-        int maxIterations = 150;
+        int maxIterations = 180;
         while (body.velocity.magnitude > Mathf.Epsilon && iterations < maxIterations)
         {
             yield return new WaitForFixedUpdate();
@@ -37,7 +37,7 @@ public class DiscController : MonoBehaviour
                 pickupReady = true; //Player can only pick it up after it has hit a wall
             }
             body.AddForce(body.velocity * decelSpeed);
-            decelSpeed -= 0.01f;
+            decelSpeed -= 0.02f;
             iterations++;
         }
         pickupReady = true; //Player can also pick it up after it stops moving
