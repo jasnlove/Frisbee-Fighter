@@ -36,6 +36,10 @@ namespace States
             transitions.Add(t);
         }
 
+        public int Count(){
+            return transitions.Count;
+        }
+
         public void InitializeState()
         {
             enterState?.Invoke();

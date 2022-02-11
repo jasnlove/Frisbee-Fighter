@@ -343,6 +343,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5272338061589321686, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272338061589321686, guid: 6b9dc99530ceabd478442e75fa9fb174, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -743,6 +747,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: stunTimer
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7230255286399551201, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
       propertyPath: m_RootOrder
       value: 8

@@ -84,10 +84,9 @@ namespace States
             }
 
             StateMachine sm = new StateMachine(statesLookup.Values.First());
-
-            foreach(var (to, condition) in _anyStates)
+            foreach(var (to, condition) in _anyStates.Select(t=> (statesLookup[t.to], t.condition)))
             {
-                sm.AddAnyState(new Transition(condition, new State(to, GetOnEnter(to), GetOnRun(to), GetOnExit(to))));
+                sm.AddAnyState(new Transition(condition, to));
             }
 
             return sm;
