@@ -62,5 +62,7 @@ namespace States
             }
             return this;
         }
+        
+        public static implicit operator bool(State s) => s != null;
     }
 }

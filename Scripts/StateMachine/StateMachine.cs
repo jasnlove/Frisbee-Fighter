@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace States
 {
     /* How to use:
@@ -12,6 +14,8 @@ namespace States
     {
         public State CurrentState { get; private set; }
 
+        private List<Transition> _anyStates = new List<Transition>();
+
         public StateMachine(State startingState)
         {
             CurrentState = startingState;
@@ -21,11 +25,28 @@ namespace States
         public void RunStateMachine()
         {
             CurrentState.OnUpdate();
-            State tmp = CurrentState.QueryStateChange();
-            if(tmp != CurrentState)
+            State tmp = QueryStateChange();   
+            if(tmp && tmp != CurrentState)
             {
                 ChangeState(tmp);
             }
+        }
+
+        public void AddAnyState(Transition t)
+        {
+            _anyStates.Add(t);
+        }
+
+        private State QueryStateChange()
+        {
+            foreach(Transition t in _anyStates)
+            {
+                if(t.Check())
+                {
+                    return t.NextState;
+                }
+            }
+            return CurrentState.QueryStateChange();;
         }
 
         private void ChangeState(State nextState) //Calls exit methods and initialization methods of new machine

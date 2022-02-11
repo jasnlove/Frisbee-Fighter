@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using States;
+using static PlayerStateNames; //See new StateNames class under the StateMachine folder.
 
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -22,10 +23,6 @@ public class PlayerController : MonoBehaviour
     private Vector2 input;
 
     private StateMachine stateMachine;
-    public static class PlayerStates {
-        public const string HasDisc = "HasDisc";
-        public const string NoDisc = "NoDisc";
-    };
 
     private void Awake()
     {
@@ -37,13 +34,13 @@ public class PlayerController : MonoBehaviour
 
         //See documentation in statemachine folder
         stateMachine = new StateMachineBuilder()
-            .WithState(PlayerStates.HasDisc)
+            .WithState(HasDisc)
             .WithOnEnter( () => toss.performed += ThrowDisc)
             .WithOnExit( () => toss.performed -= ThrowDisc)
-            .WithTransition(PlayerStates.NoDisc, () => { return toss.triggered; })
+            .WithTransition(NoDisc, () => { return toss.triggered; })
 
-            .WithState(PlayerStates.NoDisc)
-            .WithTransition(PlayerStates.HasDisc, () => { return CheckForDisc(); })
+            .WithState(NoDisc)
+            .WithTransition(HasDisc, () => { return CheckForDisc(); })
 
             .Build();
     }
@@ -58,6 +55,11 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Move(input);
+    }
+
+    public string ReturnCurrentState()
+    {
+        return stateMachine.CurrentState.Name;
     }
 
     private void Move(Vector2 input)

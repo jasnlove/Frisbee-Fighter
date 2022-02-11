@@ -33,6 +33,7 @@ namespace States
         private readonly Dictionary<string, Action> _onExit = new Dictionary<string, Action>();
         private readonly Dictionary<string, Action> _onRun = new Dictionary<string, Action>();
         private readonly List<(string from, string to, Func<bool> condition)> _transitions = new List<(string from, string to, Func<bool> condition)>();
+        private readonly List<(string to, Func<bool> condition)> _anyStates = new List<(string to, Func<bool> condition)>();
         private string _currentState;
 
         public StateMachineBuilder WithState(string name)
@@ -40,6 +41,12 @@ namespace States
             if (_states.Contains(name)) throw new ArgumentException($"State {name} already exists.");
             _states.Add(name);
             _currentState = name;
+            return this;
+        }
+
+        public StateMachineBuilder WithTransitionFromAnyState(Func<bool> condition)
+        {
+            _anyStates.Add((_currentState,condition));
             return this;
         }
 
@@ -76,7 +83,14 @@ namespace States
                 from.AssignTransition(to, condition);
             }
 
-            return new StateMachine(statesLookup.Values.First());
+            StateMachine sm = new StateMachine(statesLookup.Values.First());
+
+            foreach(var (to, condition) in _anyStates)
+            {
+                sm.AddAnyState(new Transition(condition, new State(to, GetOnEnter(to), GetOnRun(to), GetOnExit(to))));
+            }
+
+            return sm;
 
             Action GetOnRun(string key) => GetAction(_onRun, key);
             Action GetOnExit(string key) => GetAction(_onExit, key);
