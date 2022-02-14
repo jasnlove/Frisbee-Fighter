@@ -101,6 +101,7 @@ MonoBehaviour:
   speed: 5
   launchSpeed: 25
   discPrefab: {fileID: 6553032861939454417, guid: 7003a840ca282bc49952e5a906d7a8d2, type: 3}
+  slamPrefab: {fileID: 7752339358187104933, guid: aaded3c7ca7f8b74aa30aaf1c7cce212, type: 3}
   discLayer:
     serializedVersion: 2
     m_Bits: 128

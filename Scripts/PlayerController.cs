@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float launchSpeed = 6.0f;
+    [SerializeField] private float slamDelay = 0.6f;
     [SerializeField] private GameObject discPrefab;
+    [SerializeField] private GameObject slamPrefab;
     [SerializeField] private LayerMask discLayer;
     [SerializeField] private LayerMask collisionLayer = 3;
 
@@ -24,6 +26,9 @@ public class PlayerController : MonoBehaviour
 
     private StateMachine stateMachine;
 
+    private bool slam = false;
+    private float slamTimer;
+
     private void Awake()
     {
         map = GetComponent<PlayerInput>().currentActionMap;
@@ -31,6 +36,8 @@ public class PlayerController : MonoBehaviour
         movement = map.FindAction("Movement");
         toss = map.FindAction("Toss");
         mousePos = map.FindAction("MousePosition");
+
+        slamTimer = slamDelay;
 
         //See documentation in statemachine folder
         stateMachine = new StateMachineBuilder()
@@ -50,6 +57,19 @@ public class PlayerController : MonoBehaviour
     {
         stateMachine.RunStateMachine();
         input = movement.ReadValue<Vector2>();
+
+        if (slam)
+        {
+            slamTimer -= Time.deltaTime;
+            if (slamTimer < 0)
+            {
+                Debug.Log("SLAM!");
+                speed = speed * 2;
+                slamTimer = slamDelay;
+                Instantiate(slamPrefab, body.position, Quaternion.identity);
+                slam = false;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -66,6 +86,17 @@ public class PlayerController : MonoBehaviour
     {
         input = Vector2.ClampMagnitude(input, 1f);
         body.MovePosition(body.position + speed * input * Time.deltaTime);
+    }
+
+    private void OnSlam()
+    {
+        GameObject disc = GameObject.Find("Disc(Clone)");
+        if (disc == null && slam == false)
+        {
+            Debug.Log("JUMPING!");
+            slam = true;
+            speed = speed / 2.0f;
+        }
     }
 
     //Rewrote throw just to include the new input system instead of a flag for disc held

@@ -11,7 +11,8 @@
                     "id": "5c393055-9c11-4d1a-978f-a0753de511f7",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Toss",
@@ -19,7 +20,8 @@
                     "id": "a9ac0316-3fa2-4128-91be-21c9d538c7b8",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "MousePosition",
@@ -27,7 +29,17 @@
                     "id": "a150460a-d0db-4ed3-851b-103cf62fbb20",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Slam",
+                    "type": "Button",
+                    "id": "06ab3567-b9e3-4523-9c76-a91e6feecfb0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -88,6 +100,17 @@
                 },
                 {
                     "name": "",
+                    "id": "29bcac0b-de47-4073-b239-cba2dea5b622",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "6979cd88-3851-4e52-86e5-136dc36bb94d",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
@@ -110,12 +133,45 @@
                 },
                 {
                     "name": "",
+                    "id": "eaa71d38-44de-42ee-a61d-c943e5aa6d31",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toss",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d9387bf7-cfaf-4631-bed3-5be5fb55a1b7",
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "667c0e9a-815f-4b12-be3c-296423f7119b",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slam",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "426c7e42-aaa8-4ab3-846f-9a4caac3f3e3",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slam",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
