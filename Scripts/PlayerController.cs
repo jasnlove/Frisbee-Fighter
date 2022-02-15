@@ -80,17 +80,19 @@ public class PlayerController : MonoBehaviour
         return stateMachine.CurrentState.Name;
     }
 
-    private void EndSlam()
-    {
-        speed = speed * 2;
-        slamTimer = slamDelay;
-        Instantiate(slamPrefab, body.position, Quaternion.identity);
-    }
-
     private void Move(Vector2 input)
     {
         input = Vector2.ClampMagnitude(input, 1f);
         body.MovePosition(body.position + speed * input * Time.deltaTime);
+    }
+
+    private void ThrowDisc(InputAction.CallbackContext context)
+    {
+        Vector2 launchDirection = Camera.main.ScreenToWorldPoint(mousePos.ReadValue<Vector2>()) - transform.position;
+        launchDirection.Normalize();
+        GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
+        DiscController disc = discObject.GetComponent<DiscController>();
+        disc.Launch(launchDirection, launchSpeed, collisionLayer);
     }
 
     private void OnSlam()
@@ -99,14 +101,11 @@ public class PlayerController : MonoBehaviour
         slamTimer = slamDelay;
     }
 
-    //Rewrote throw just to include the new input system instead of a flag for disc held
-    private void ThrowDisc(InputAction.CallbackContext context)
+    private void EndSlam()
     {
-        Vector2 launchDirection = Camera.main.ScreenToWorldPoint(mousePos.ReadValue<Vector2>()) - transform.position;
-        launchDirection.Normalize();
-        GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
-        DiscController disc = discObject.GetComponent<DiscController>();
-        disc.Launch(launchDirection, launchSpeed, collisionLayer);
+        speed = speed * 2;
+        slamTimer = slamDelay;
+        Instantiate(slamPrefab, body.position, Quaternion.identity);
     }
 
     private bool CheckForDisc()
