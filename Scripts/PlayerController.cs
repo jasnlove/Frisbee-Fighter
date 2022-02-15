@@ -21,12 +21,12 @@ public class PlayerController : MonoBehaviour
     private InputAction mousePos;
     private InputAction movement;
     private InputAction toss;
+    private InputAction slam;
 
     private Vector2 input;
 
     private StateMachine stateMachine;
 
-    private bool slam = false;
     private float slamTimer;
 
     private void Awake()
@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
         movement = map.FindAction("Movement");
         toss = map.FindAction("Toss");
         mousePos = map.FindAction("MousePosition");
+        slam = map.FindAction("Slam");
 
         slamTimer = slamDelay;
 
@@ -45,9 +46,19 @@ public class PlayerController : MonoBehaviour
             .WithOnEnter( () => toss.performed += ThrowDisc)
             .WithOnExit( () => toss.performed -= ThrowDisc)
             .WithTransition(NoDisc, () => { return toss.triggered; })
+            .WithTransition(Slam, () => { return slam.triggered; })
 
             .WithState(NoDisc)
             .WithTransition(HasDisc, () => { return CheckForDisc(); })
+
+            .WithState(Slam)
+            .WithOnEnter( () => { OnSlam(); })
+            .WithOnRun(() => slamTimer -= Time.deltaTime)
+            .WithTransition(SlamHit, ()=> { return slamTimer <= 0;})
+
+            .WithState(SlamHit)
+            .WithOnEnter( () => { EndSlam(); })
+            .WithTransition(HasDisc, () => { return true;})
 
             .Build();
     }
@@ -57,19 +68,6 @@ public class PlayerController : MonoBehaviour
     {
         stateMachine.RunStateMachine();
         input = movement.ReadValue<Vector2>();
-
-        if (slam)
-        {
-            slamTimer -= Time.deltaTime;
-            if (slamTimer < 0)
-            {
-                Debug.Log("SLAM!");
-                speed = speed * 2;
-                slamTimer = slamDelay;
-                Instantiate(slamPrefab, body.position, Quaternion.identity);
-                slam = false;
-            }
-        }
     }
 
     private void FixedUpdate()
@@ -82,6 +80,13 @@ public class PlayerController : MonoBehaviour
         return stateMachine.CurrentState.Name;
     }
 
+    private void EndSlam()
+    {
+        speed = speed * 2;
+        slamTimer = slamDelay;
+        Instantiate(slamPrefab, body.position, Quaternion.identity);
+    }
+
     private void Move(Vector2 input)
     {
         input = Vector2.ClampMagnitude(input, 1f);
@@ -90,13 +95,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnSlam()
     {
-        GameObject disc = GameObject.Find("Disc(Clone)");
-        if (disc == null && slam == false)
-        {
-            Debug.Log("JUMPING!");
-            slam = true;
-            speed = speed / 2.0f;
-        }
+        speed = speed / 2.0f;
+        slamTimer = slamDelay;
     }
 
     //Rewrote throw just to include the new input system instead of a flag for disc held

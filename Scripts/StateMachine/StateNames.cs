@@ -3,6 +3,8 @@ public static class PlayerStateNames
 {
     public const string HasDisc = "HasDisc";
     public const string NoDisc = "NoDisc";
+    public const string Slam = "Slam";
+    public const string SlamHit = "SlamHit";
 }
 
 public static class EnemyStateNames
