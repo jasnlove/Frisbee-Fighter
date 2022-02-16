@@ -22,25 +22,20 @@ namespace FrisbeeThrow
             rb = GetComponent<Rigidbody2D>();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
             enemyBehaviours = new StateMachineBuilder()
-                .WithState(Flee)
-                .WithOnRun(()=>{MoveAwayFromPlayer();})
-                .WithTransition(Charge, ()=>{ return player.ReturnCurrentState() == NoDisc || DistanceFromPlayer() < 3;})
-                .WithTransition(StoodStill, () => { return DistanceFromPlayer() > 5 && player.ReturnCurrentState() == HasDisc;})
-
                 .WithState(Charge)
-                .WithOnRun(()=>{MoveTowardsPlayer();})
-                .WithTransition(Flee, ()=>{ return player.ReturnCurrentState() == HasDisc && DistanceFromPlayer() < 10 && DistanceFromPlayer() > 3;})
-                
+                .WithOnRun(() => { MoveTowardsPlayer(); })
+                .WithTransition(Flee, () => { return player.ReturnCurrentState() == Slam; })
 
-                .WithState(StoodStill)
-                .WithTransition(Flee, () => { return DistanceFromPlayer() < 5 && player.ReturnCurrentState() == HasDisc;})
-                .WithTransition(Charge, () => { return player.ReturnCurrentState() == NoDisc || DistanceFromPlayer() > 10;})
+                .WithState(Flee)
+                .WithOnRun(() => { MoveAwayFromPlayer(); })
+                .WithTransition(Charge, () => { return player.ReturnCurrentState() == NoDisc || player.ReturnCurrentState() == SlamHit; })
 
                 .WithState(Stunned)
-                .WithOnEnter(()=>{setFreeTime = stunTimer;})
-                .WithOnRun(()=>{setFreeTime -= Time.deltaTime;})
-                .WithTransition(Flee, ()=>{ return setFreeTime <= 0;})
-                .WithTransitionFromAnyState(()=>{ return enemyBehaviours.CurrentState.Name != Stunned && DetectStun();})
+                .WithOnEnter(() => { setFreeTime = stunTimer; })
+                .WithOnRun(() => { setFreeTime -= Time.deltaTime; })
+                .WithTransition(Charge, () => { return setFreeTime <= 0; })
+                .WithTransitionFromAnyState(() => { return enemyBehaviours.CurrentState.Name != Stunned && DetectStun(); })
+
                 .Build();
         }
 
