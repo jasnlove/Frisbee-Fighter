@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 3.0f;
     [SerializeField] private float launchSpeed = 6.0f;
     [SerializeField] private float slamDelay = 0.6f;
+    [SerializeField] private float timeInvincible = 0.5f;
+    [SerializeField] private int maxHealth = 5;
     [SerializeField] private GameObject discPrefab;
     [SerializeField] private GameObject slamPrefab;
     [SerializeField] private LayerMask discLayer;
@@ -28,9 +30,14 @@ public class PlayerController : MonoBehaviour
     private StateMachine stateMachine;
 
     private float slamTimer;
+    private float invincibleTimer;
+    private int currentHealth;
+    private bool isInvincible = false;
 
     private void Awake()
     {
+        currentHealth = maxHealth;
+        invincibleTimer = timeInvincible;
         map = GetComponent<PlayerInput>().currentActionMap;
         body = GetComponent<Rigidbody2D>();
         movement = map.FindAction("Movement");
@@ -68,6 +75,13 @@ public class PlayerController : MonoBehaviour
     {
         stateMachine.RunStateMachine();
         input = movement.ReadValue<Vector2>();
+
+        if (isInvincible)
+        {
+            invincibleTimer -= Time.deltaTime;
+            if (invincibleTimer < 0)
+                isInvincible = false;
+        }
     }
 
     private void FixedUpdate()
@@ -99,6 +113,8 @@ public class PlayerController : MonoBehaviour
     {
         speed = speed / 2.0f;
         slamTimer = slamDelay;
+        isInvincible = true;
+        invincibleTimer = slamDelay;
     }
 
     private void EndSlam()
@@ -121,5 +137,20 @@ public class PlayerController : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void ChangeHealth(int amount)
+    {
+        if (amount < 0)
+        {
+            if (isInvincible)
+                return;
+
+            isInvincible = true;
+            invincibleTimer = timeInvincible;
+        }
+
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log("Health: " + currentHealth + "/" + maxHealth);
     }
 }
