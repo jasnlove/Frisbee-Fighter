@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f730bb474a9a70247bd4d2b82d11da0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  discSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  chargedDiscSprite: {fileID: -2135585597343286014, guid: eed45a33cd08446c8b88325cf82fc52f, type: 3}
   pickupReady: 0
 --- !u!50 &4706029632775406751
 Rigidbody2D:

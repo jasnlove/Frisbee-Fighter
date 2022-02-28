@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
     public GameObject PauseMenuUI;
+    public PlayerInput player;
 
     PauseAction action;
 
@@ -40,6 +42,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ResumeGame()
     {
+        player.ActivateInput();
         PauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -48,6 +51,7 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
+        player.DeactivateInput();
         PauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;

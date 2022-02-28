@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private float slamTimer;
     private float invincibleTimer;
     private int currentHealth;
+    private int discCharge = 0;
     private bool isInvincible = false;
 
     private void Awake()
@@ -76,6 +77,11 @@ public class PlayerController : MonoBehaviour
         stateMachine.RunStateMachine();
         input = movement.ReadValue<Vector2>();
 
+        if (discCharge >= 100 && map.enabled)
+            slam.Enable();
+        else
+            slam.Disable();
+
         if (isInvincible)
         {
             invincibleTimer -= Time.deltaTime;
@@ -119,6 +125,7 @@ public class PlayerController : MonoBehaviour
 
     private void EndSlam()
     {
+        discCharge = 0;
         speed = speed * 2;
         slamTimer = slamDelay;
         Instantiate(slamPrefab, body.position, Quaternion.identity);
@@ -152,5 +159,16 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log("Health: " + currentHealth + "/" + maxHealth);
+    }
+
+    public void ChangeCharge(int amount)
+    {
+        discCharge = Mathf.Clamp(discCharge + amount, 0, 100);
+        Debug.Log("Disc Charge: " + discCharge + "/100");
+    }
+
+    public int GetCharge()
+    {
+        return discCharge;
     }
 }

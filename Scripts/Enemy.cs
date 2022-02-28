@@ -68,6 +68,7 @@ namespace FrisbeeThrow
                 DiscController disc = c.GetComponent<DiscController>();
                 if (disc)
                 {
+                    disc.Charge(34);
                     return true;
                 }
             }
