@@ -9,30 +9,11 @@ public class PauseMenu : MonoBehaviour
     public GameObject PauseMenuUI;
     public PlayerInput player;
 
-    PauseAction action;
-
-    private void Awake()
-    {
-        action = new PauseAction();
+    private void Awake(){
+        player = GameObject.FindObjectOfType<PlayerController>().GetComponent<PlayerInput>();
     }
 
-    private void OnEnable()
-    {
-        action.Enable();
-    }
-
-    private void OnDisable()
-    {
-        action.Disable();
-    }
-
-    void Update()
-    {
-        action.Pause.PauseGame.performed += _ => CheckPause();
-
-    }
-
-    private void CheckPause()
+    public void CheckPause()
     {
         if (GameIsPaused)
             ResumeGame();

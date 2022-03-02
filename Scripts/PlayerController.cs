@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private InputAction movement;
     private InputAction toss;
     private InputAction slam;
+    private InputAction pause;
 
     private Vector2 input;
 
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     private int currentHealth;
     private int discCharge = 0;
     private bool isInvincible = false;
+    private PauseMenu pauseMenu;
 
     private void Awake()
     {
@@ -45,6 +47,10 @@ public class PlayerController : MonoBehaviour
         toss = map.FindAction("Toss");
         mousePos = map.FindAction("MousePosition");
         slam = map.FindAction("Slam");
+        pause = map.FindAction("Pause");
+        pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
+        pause.performed += ctx => pauseMenu.CheckPause();
+        
 
         slamTimer = slamDelay;
 
