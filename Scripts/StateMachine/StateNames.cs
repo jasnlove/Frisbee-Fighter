@@ -14,3 +14,8 @@ public static class EnemyStateNames
     public const string Charge = "Charge";
     public const string Stunned = "Stunned";
 }    
+
+public static class DirectorSpawnStateNames{
+    public const string InWave = "InWave";
+    public const string SpawnWave = "SpawnWave";
+}
