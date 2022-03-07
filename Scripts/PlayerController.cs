@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float timeInvincible = 0.5f;
     [SerializeField] private int maxHealth = 5;
     [SerializeField] private GameObject discPrefab;
+    [SerializeField] private GameObject hyperDiscPrefab;
     [SerializeField] private GameObject slamPrefab;
     [SerializeField] private LayerMask discLayer;
     [SerializeField] private LayerMask collisionLayer = 3;
@@ -50,8 +51,6 @@ public class PlayerController : MonoBehaviour
         pause = map.FindAction("Pause");
         pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
         pause.performed += ctx => pauseMenu.CheckPause();
-        
-
         slamTimer = slamDelay;
 
         //See documentation in statemachine folder
@@ -116,9 +115,19 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 launchDirection = Camera.main.ScreenToWorldPoint(mousePos.ReadValue<Vector2>()) - transform.position;
         launchDirection.Normalize();
-        GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
-        DiscController disc = discObject.GetComponent<DiscController>();
-        disc.Launch(launchDirection, launchSpeed, collisionLayer);
+
+        if (Input.GetMouseButton(1) && discCharge >= 100)
+        {
+            GameObject discObject = Instantiate(hyperDiscPrefab, body.position, Quaternion.identity);
+            DiscController disc = discObject.GetComponent<DiscController>();
+            disc.Launch(launchDirection, launchSpeed, collisionLayer);
+        }
+        else
+        {
+            GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
+            DiscController disc = discObject.GetComponent<DiscController>();
+            disc.Launch(launchDirection, launchSpeed, collisionLayer);
+        }
     }
 
     private void OnSlam()
@@ -145,6 +154,8 @@ public class PlayerController : MonoBehaviour
             DiscController disc = c.GetComponent<DiscController>();
             if (disc && disc.pickupReady)
             {
+                if (disc.hyperDisc)
+                    discCharge = 0;
                 Destroy(disc.gameObject);
                 return true;
             }

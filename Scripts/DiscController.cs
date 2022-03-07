@@ -7,6 +7,7 @@ public class DiscController : MonoBehaviour
     [SerializeField] Sprite discSprite;
     [SerializeField] Sprite chargedDiscSprite;
 
+    public bool hyperDisc;
     public bool pickupReady = false;
     private Rigidbody2D body;
     private float decelSpeed = -0.8f;

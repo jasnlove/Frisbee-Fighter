@@ -69,6 +69,8 @@ namespace FrisbeeThrow
                 if (disc)
                 {
                     disc.Charge(34);
+                    if (disc.hyperDisc)
+                        Destroy(gameObject);
                     return true;
                 }
             }
