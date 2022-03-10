@@ -42,7 +42,7 @@ namespace FrisbeeThrow
             for(int i = 0; i < _enemiesToSpawn; i++){
                 GameObject temp = Instantiate<GameObject>(Roll());
                 _enemiesSpawned.Add(temp);
-                temp.transform.position = (Vector3)Random.insideUnitCircle * _spawnDistanceFromPlayer + _player.transform.position;
+                temp.transform.position = (Vector3)Random.insideUnitCircle.normalized * _spawnDistanceFromPlayer + _player.transform.position;
             }
         }
 
