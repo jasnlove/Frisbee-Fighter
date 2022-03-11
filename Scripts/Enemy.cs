@@ -68,7 +68,7 @@ namespace FrisbeeThrow
             foreach (Collider2D c in col)
             {
                 DiscController disc = c.GetComponent<DiscController>();
-                if (disc)
+                if (disc && disc.velocity.magnitude >= 0.25f)
                 {
                     disc.Charge(34);
                     if (disc.hyperDisc)

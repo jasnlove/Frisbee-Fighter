@@ -64,4 +64,6 @@ public class DiscController : MonoBehaviour
     {
         player.ChangeCharge(amount);
     }
+
+    public Vector2 velocity => body.velocity;
 }
