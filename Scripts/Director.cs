@@ -26,8 +26,8 @@ namespace FrisbeeThrow
             _waveStateMachine = new StateMachineBuilder()
                 .WithState(InWave)
                 .WithOnEnter(() => _timer = _durationBetweenWaves)
-                .WithOnRun(() => _timer -= Time.deltaTime)
-                .WithTransition(SpawnWave, () => _timer <= 0 || _enemiesSpawned.Count == 0)
+                .WithOnRun(() => {_timer -= Time.deltaTime; if(_enemiesSpawned.Count == 0) _timer /= 3; })
+                .WithTransition(SpawnWave, () => _timer <= 0)
 
                 .WithState(SpawnWave)
                 .WithOnEnter(() => SpawnEnemies())
