@@ -16,7 +16,7 @@ namespace FrisbeeThrow
         [Header("Weights")]
         [SerializeField] private int[] _weights;
 
-        private List<GameObject> _enemiesSpawned = new List<GameObject>();
+        public List<GameObject> _enemiesSpawned = new List<GameObject>();
         private StateMachine _waveStateMachine;
         private float _timer;
         private GameObject _player;
@@ -24,14 +24,14 @@ namespace FrisbeeThrow
         private void Awake(){
             _player = GameObject.FindGameObjectWithTag("Player");
             _waveStateMachine = new StateMachineBuilder()
-                .WithState(SpawnWave)
-                .WithOnEnter(() => SpawnEnemies())
-                .WithTransition(InWave, () => true)
-
                 .WithState(InWave)
                 .WithOnEnter(() => _timer = _durationBetweenWaves)
                 .WithOnRun(() => _timer -= Time.deltaTime)
                 .WithTransition(SpawnWave, () => _timer <= 0 || _enemiesSpawned.Count == 0)
+
+                .WithState(SpawnWave)
+                .WithOnEnter(() => SpawnEnemies())
+                .WithTransition(InWave, () => true)
                 .Build();
         }
 
@@ -43,7 +43,12 @@ namespace FrisbeeThrow
             for(int i = 0; i < _enemiesToSpawn; i++){
                 GameObject temp = Instantiate<GameObject>(Roll());
                 _enemiesSpawned.Add(temp);
-                temp.transform.position = (Vector3)Random.insideUnitCircle.normalized * _spawnDistanceFromPlayer + _player.transform.position;
+                int spawnRoll;
+                do{
+                    spawnRoll = Random.Range(0, spawnpoints.Count);
+                }while(Vector2.SqrMagnitude(spawnpoints[spawnRoll].position - _player.transform.position) < _spawnDistanceFromPlayer);
+                temp.transform.position = spawnpoints[spawnRoll].position;
+                temp.GetComponent<Enemy>().d = this;
             }
         }
 
