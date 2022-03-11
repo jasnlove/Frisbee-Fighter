@@ -28,6 +28,10 @@ namespace FrisbeeThrow
                     tmp.transform.SetParent(parent);
                 }
             }
+
+            foreach(Transform child in parent.GetComponentsInChildren<Transform>()){
+                dr.spawnpoints.Add(child);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace FrisbeeThrow
 {
     public class Director : MonoBehaviour
     {
-        public List<GameObject> spawnpoints;
+        public List<Transform> spawnpoints;
         [SerializeField] private float _durationBetweenWaves = 15;
         [SerializeField] private int _enemiesToSpawn = 2;
         [SerializeField] private float _spawnDistanceFromPlayer = 5;
