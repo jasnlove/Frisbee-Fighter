@@ -119,7 +119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  stunTimer: 1.5
+  stunTimer: 2.5
   discLayer:
     serializedVersion: 2
     m_Bits: 128
