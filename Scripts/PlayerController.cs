@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
             .WithTransition(SlamHit, ()=> { return slamTimer <= 0;})
 
             .WithState(SlamHit)
-            .WithOnEnter( () => { EndSlam(); })
+            .WithOnEnter( () => { EndSlam(); Director.Instance.SuperSlams++;})
             .WithTransition(HasDisc, () => { return true;})
 
             .Build();
@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour
             GameObject discObject = Instantiate(hyperDiscPrefab, body.position, Quaternion.identity);
             DiscController disc = discObject.GetComponent<DiscController>();
             disc.Launch(launchDirection, launchSpeed, collisionLayer);
+            Director.Instance.HyperTosses++;
         }
         else
         {
