@@ -8,8 +8,6 @@ namespace FrisbeeThrow
     [RequireComponent(typeof(Rigidbody2D))]
     public class Enemy : MonoBehaviour
     {
-        public Director d;
-
         [SerializeField] private float moveSpeed = 6.0f;
         [SerializeField] private float stunTimer = 1.5f;
         [SerializeField] private LayerMask discLayer = 7;
@@ -90,7 +88,7 @@ namespace FrisbeeThrow
         }
 
         private void OnDestroy(){
-            d._enemiesSpawned.Remove(this.gameObject);
+            Director.Instance.EnemiesSpawned.Remove(this.gameObject);
         }
     }
 }

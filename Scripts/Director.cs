@@ -7,6 +7,8 @@ namespace FrisbeeThrow
 {
     public class Director : MonoBehaviour
     {
+        public static Director Instance {get; private set;}
+
         public List<Transform> spawnpoints;
         [SerializeField] private float _durationBetweenWaves = 15;
         [SerializeField] private int _enemiesToSpawn = 2;
@@ -16,17 +18,21 @@ namespace FrisbeeThrow
         [Header("Weights")]
         [SerializeField] private int[] _weights;
 
-        public List<GameObject> _enemiesSpawned = new List<GameObject>();
+        public List<GameObject> EnemiesSpawned = new List<GameObject>();
         private StateMachine _waveStateMachine;
         private float _timer;
         private GameObject _player;
 
         private void Awake(){
+            if(Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
             _player = GameObject.FindGameObjectWithTag("Player");
             _waveStateMachine = new StateMachineBuilder()
                 .WithState(InWave)
                 .WithOnEnter(() => _timer = _durationBetweenWaves)
-                .WithOnRun(() => {_timer -= Time.deltaTime; if(_enemiesSpawned.Count == 0) _timer /= 3; })
+                .WithOnRun(() => {_timer -= Time.deltaTime; if(EnemiesSpawned.Count == 0) _timer -= Time.deltaTime; })
                 .WithTransition(SpawnWave, () => _timer <= 0)
 
                 .WithState(SpawnWave)
@@ -42,13 +48,12 @@ namespace FrisbeeThrow
         private void SpawnEnemies(){
             for(int i = 0; i < _enemiesToSpawn; i++){
                 GameObject temp = Instantiate<GameObject>(Roll());
-                _enemiesSpawned.Add(temp);
+                EnemiesSpawned.Add(temp);
                 int spawnRoll;
                 do{
                     spawnRoll = Random.Range(0, spawnpoints.Count);
                 }while(Vector2.SqrMagnitude(spawnpoints[spawnRoll].position - _player.transform.position) < _spawnDistanceFromPlayer);
                 temp.transform.position = spawnpoints[spawnRoll].position;
-                temp.GetComponent<Enemy>().d = this;
             }
         }
 
