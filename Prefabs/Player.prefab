@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  launchSpeed: 25
+  launchSpeed: 30
   slamDelay: 0.6
   timeInvincible: 0.5
   maxHealth: 5

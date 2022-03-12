@@ -27,6 +27,13 @@ public class DiscController : MonoBehaviour
             rend.sprite = chargedDiscSprite;
         else
             rend.sprite = discSprite;
+
+        if (velocity.magnitude < 0.05f && player.GetCharge() > 0)
+        {
+            rend.sprite = discSprite;
+            hyperDisc = false;
+            Charge(0);
+        }
     }
 
     public void Launch(Vector2 direction, float speed, int collisionLayer)
