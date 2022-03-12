@@ -305,7 +305,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
-  m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
@@ -12409,6 +12408,54 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: chargeSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: patrolSpeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: patrolRadius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: chargeDuration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: patrolBounds.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: patrolBounds.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: locationalError.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: locationalError.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: patrolBounds.m_Size.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: patrolBounds.m_Size.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: locationalError.m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: locationalError.m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7230255286399551201, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -14121,11 +14168,11 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0
   m_Points:
-  - {x: -12, y: 7}
-  - {x: 12, y: 7}
-  - {x: 12, y: -6}
-  - {x: -12, y: -6}
-  - {x: -12, y: 7}
+  - {x: -12.442702, y: 6.498272}
+  - {x: 11.498271, y: 6.498272}
+  - {x: 11.557299, y: -6.5312424}
+  - {x: -12.560756, y: -6.5312414}
+  - {x: -12.501728, y: 6.439245}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0

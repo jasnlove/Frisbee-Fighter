@@ -13,13 +13,19 @@ namespace States
     public class StateMachine
     {
         public State CurrentState { get; private set; }
+        private State _startingState;
 
         private List<Transition> _anyStates = new List<Transition>();
 
         public StateMachine(State startingState)
         {
             CurrentState = startingState;
+            _startingState = startingState;
             CurrentState.InitializeState();
+        }
+
+        public void ResetStateMachine(){
+            CurrentState = _startingState;
         }
 
         public void RunStateMachine()

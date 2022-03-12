@@ -16,29 +16,52 @@ namespace FrisbeeThrow
         [SerializeField] private LayerMask discLayer = 7;
 
         private StateMachine enemyBehaviours;
+        private StateMachine stayMachine;
+        private StateMachine chargeMachine;
+
         private PlayerController player;
         private Rigidbody2D rb;
         private float setFreeTime;
         private float liveTime;
+        
+        [Header("Charge state information")]
+        [SerializeField] private float chargeSpeed;
+        [SerializeField] private Vector2 locationalError;
+        [SerializeField] private float chargeDuration;
+        private float timer;
+        private Vector3 chargeDir;
+        
+        [Header("Patrol state information")]
+        [SerializeField] private float patrolSpeed = 1.5f;
+        [SerializeField] private float patrolRadius = 2f;
+        private Vector3 originalPos;
+        private Vector3 point;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+            stayMachine = PatrolStates();
+            chargeMachine = ChargeStates();
+
             enemyBehaviours = new StateMachineBuilder()
                 .WithState(Stay)
-                .WithOnRun(() => Pace())
+                .WithOnEnter(() => originalPos = transform.position)
+                .WithOnEnter(() => stayMachine.ResetStateMachine())
+                .WithOnRun(() => stayMachine.RunStateMachine())
                 .WithTransition(Flee, () => DistanceFromPlayer() < 5)
+                .WithTransition(Charge, () => priority)
 
                 .WithState(Charge)
-                .WithOnRun(() => MoveTowardsPlayer())
-                .WithTransition(Flee, () => player.ReturnCurrentState() == Slam)
-                .WithTransition(Stay, () => priority == false && DistanceFromPlayer() >= 6)
+                .WithOnEnter(() => chargeMachine.ResetStateMachine())
+                .WithOnRun(() => chargeMachine.RunStateMachine())
+                .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 6)
 
                 .WithState(Flee)
                 .WithOnRun(() => MoveAwayFromPlayer())
-                .WithTransition(Charge, () => priority == true || DistanceFromPlayer() <= 3)
-                .WithTransition(Stay, () => priority == false && DistanceFromPlayer() >= 5)
+                .WithTransition(Charge, () => priority || DistanceFromPlayer() <= 3)
+                .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
 
                 .WithState(Stunned)
                 .WithOnEnter(() => setFreeTime = stunTimer)
@@ -54,12 +77,6 @@ namespace FrisbeeThrow
         {
             liveTime += 7 * Time.deltaTime;
             enemyBehaviours.RunStateMachine();
-            Debug.Log(enemyBehaviours.CurrentState.Name);
-        }
-
-        private void MoveTowardsPlayer()
-        {
-            transform.position = transform.position + (player.transform.position - transform.position).normalized * moveSpeed * Time.deltaTime;
         }
 
         private void MoveAwayFromPlayer()
@@ -107,6 +124,50 @@ namespace FrisbeeThrow
 
         private void OnDestroy(){
             Director.Instance.EnemiesSpawned.Remove(this.gameObject);
+        }
+
+        private Vector3 SetPointAroundSpotWithError(Vector3 point, Vector2 bounds){
+            return point + new Vector3(Random.Range(-bounds.x, bounds.x), Random.Range(-bounds.y, bounds.y), 0);
+        }
+
+        private Vector3 SetPointAroundSpotWithError(Vector3 point, float radius){
+            return point + new Vector3(Random.Range(-radius, radius), Random.Range(-radius, radius), 0);
+        }
+
+        private bool DetectWall(){
+            return Physics2D.OverlapBox(transform.position, transform.localScale * 1.25f, 0, LayerMask.GetMask("Collision"));
+        }
+
+        private StateMachine ChargeStates(){
+            return new StateMachineBuilder()
+                .WithState(SetPointCharge)
+                .WithOnEnter(() => chargeDir = (SetPointAroundSpotWithError(player.transform.position, locationalError) - transform.position).normalized)
+                .WithTransition(ChargeToPoint, () => true)
+
+                .WithState(ChargeToPoint)
+                .WithOnRun(() => transform.position += chargeDir * chargeSpeed * Time.deltaTime)
+                .WithTransition(SetPointCharge, () => Vector3.Magnitude(transform.position - player.transform.position) >= locationalError.x * 2 || transform.position == point || DetectWall())
+                .Build();
+        }
+
+        private StateMachine PatrolStates(){
+            return new StateMachineBuilder()
+                .WithState(SetPoint)
+                .WithOnEnter(() => point = SetPointAroundSpotWithError(originalPos, patrolRadius))
+                .WithTransition(GoToPoint, () => true)
+
+                .WithState(GoToPoint)
+                .WithOnRun(() => transform.position = Vector3.MoveTowards(transform.position, point, patrolSpeed * Time.deltaTime))
+                .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall() || Vector3.Magnitude(transform.position - point) <= 0.2f)
+                .Build();
+        }
+
+        private void OnDrawGizmos(){
+            if(enemyBehaviours == null) return;
+            if(enemyBehaviours.CurrentState.Name == Stay){
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(originalPos, patrolRadius);
+            }
         }
     }
 }

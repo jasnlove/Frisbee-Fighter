@@ -21,6 +21,7 @@ namespace States
 
         public bool Check()
         {
+            if(condition == null) return false;
             return condition.Invoke();
         }
     }
