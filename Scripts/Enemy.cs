@@ -13,7 +13,8 @@ namespace FrisbeeThrow
 
         [SerializeField] private float moveSpeed = 6.0f;
         [SerializeField] private float stunTimer = 2f;
-        [SerializeField] private LayerMask discLayer = 7;
+        private LayerMask discLayer;
+        private LayerMask collisionLayer;
 
         private StateMachine enemyBehaviours;
         private StateMachine stayMachine;
@@ -41,7 +42,8 @@ namespace FrisbeeThrow
         {
             rb = GetComponent<Rigidbody2D>();
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
+            discLayer = LayerMask.GetMask("Disc");
+            collisionLayer = LayerMask.GetMask("Collision");
             stayMachine = PatrolStates();
             chargeMachine = ChargeStates();
 
