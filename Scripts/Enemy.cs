@@ -58,11 +58,11 @@ public class Enemy : MonoBehaviour
             .WithState(Charge)
             .WithOnEnter(() => chargeMachine.ResetStateMachine())
             .WithOnRun(() => chargeMachine.RunStateMachine())
-            .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 6)
+            .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
 
             .WithState(Flee)
             .WithOnRun(() => MoveAwayFromPlayer())
-            .WithTransition(Charge, () => priority || DistanceFromPlayer() <= 3)
+            .WithTransition(Charge, () => priority)
             .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
 
             .WithState(Stunned)
