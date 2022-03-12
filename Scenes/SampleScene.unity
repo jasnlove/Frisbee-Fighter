@@ -12409,6 +12409,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
+      propertyPath: priority
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230255286399551200, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
       propertyPath: chargeSpeed
       value: 8
       objectReference: {fileID: 0}
@@ -12462,11 +12466,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7230255286399551201, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.582817
+      value: -11.36
       objectReference: {fileID: 0}
     - target: {fileID: 7230255286399551201, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.014787734
+      value: 0.63
       objectReference: {fileID: 0}
     - target: {fileID: 7230255286399551201, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
       propertyPath: m_LocalPosition.z

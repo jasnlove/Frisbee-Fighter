@@ -28,9 +28,10 @@ namespace FrisbeeThrow
         [Header("Charge state information")]
         [SerializeField] private float chargeSpeed;
         [SerializeField] private Vector2 locationalError;
-        [SerializeField] private float chargeDuration;
+        [SerializeField] private float minimumChargeTime = 0.25f;
         private float timer;
         private Vector3 chargeDir;
+        private Vector3 chargePoint;
         
         [Header("Patrol state information")]
         [SerializeField] private float patrolSpeed = 1.5f;
@@ -137,18 +138,21 @@ namespace FrisbeeThrow
         }
 
         private bool DetectWall(){
-            return Physics2D.OverlapBox(transform.position, transform.localScale * 1.25f, 0, LayerMask.GetMask("Collision"));
+            return Physics2D.OverlapBox(transform.position, transform.localScale * 1.25f, 0, collisionLayer);
         }
 
         private StateMachine ChargeStates(){
             return new StateMachineBuilder()
                 .WithState(SetPointCharge)
-                .WithOnEnter(() => chargeDir = (SetPointAroundSpotWithError(player.transform.position, locationalError) - transform.position).normalized)
+                .WithOnEnter(() => timer = minimumChargeTime)
+                .WithOnEnter(() => chargePoint = SetPointAroundSpotWithError(player.transform.position, locationalError))
+                .WithOnEnter(() => chargeDir = (chargePoint - transform.position).normalized)
                 .WithTransition(ChargeToPoint, () => true)
 
                 .WithState(ChargeToPoint)
+                .WithOnRun(() => timer -= Time.deltaTime)
                 .WithOnRun(() => transform.position += chargeDir * chargeSpeed * Time.deltaTime)
-                .WithTransition(SetPointCharge, () => Vector3.Magnitude(transform.position - player.transform.position) >= locationalError.x * 2 || transform.position == point || DetectWall())
+                .WithTransition(SetPointCharge, () => (timer <= 0 && (Vector3.Magnitude(transform.position - chargePoint) <= 0.05f || Vector3.Magnitude(transform.position - player.transform.position) >= 5)) || DetectWall())
                 .Build();
         }
 
