@@ -66,6 +66,7 @@ public class Enemy : MonoBehaviour
             .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
 
             .WithState(Stunned)
+            .WithOnEnter(() => priority = true)
             .WithOnEnter(() => setFreeTime = stunTimer)
             .WithOnRun(() => setFreeTime -= Time.deltaTime)
             .WithOnRun(() => DetectStun())
@@ -133,7 +134,7 @@ public class Enemy : MonoBehaviour
     }
 
     private bool DetectWall(){
-        return Physics2D.OverlapBox(transform.position, transform.localScale * 1.25f, 0, collisionLayer);
+        return Physics2D.OverlapBox(transform.position, transform.localScale, 0, collisionLayer);
     }
 
     private StateMachine ChargeStates(){
@@ -158,8 +159,8 @@ public class Enemy : MonoBehaviour
             .WithTransition(GoToPoint, () => true)
 
             .WithState(GoToPoint)
-            .WithOnRun(() => transform.position += (transform.position - point).normalized * patrolSpeed * Time.deltaTime)
-            .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall())
+            .WithOnRun(() => transform.position = Vector3.MoveTowards(transform.position, point, patrolSpeed * Time.deltaTime))
+            .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall() || Vector3.Magnitude(transform.position - point) <= 0.05f)
             .Build();
     }
 
