@@ -27,7 +27,7 @@ public class SlamController : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        FrisbeeThrow.Enemy enemy = collider.GetComponent<FrisbeeThrow.Enemy>();
+        Enemy enemy = collider.GetComponent<Enemy>();
         if (enemy != null)
             Destroy(collider.gameObject);
     }

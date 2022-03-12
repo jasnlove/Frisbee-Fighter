@@ -118,12 +118,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ebb2c454e734d499c5b341fe8de8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Bravery: 1
+  priority: 0
   moveSpeed: 5
   stunTimer: 2.5
-  discLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  setFreeTime: 0
+  chargeSpeed: 8
+  locationalError: {x: 0.25, y: 0.25}
+  minimumChargeTime: 0.25
+  patrolSpeed: 1
+  patrolRadius: 3
 --- !u!61 &7230255286399551206
 BoxCollider2D:
   m_ObjectHideFlags: 0
