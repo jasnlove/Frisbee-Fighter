@@ -158,7 +158,7 @@ public class Enemy : MonoBehaviour
             .WithTransition(GoToPoint, () => true)
 
             .WithState(GoToPoint)
-            .WithOnRun(() => transform.position = Vector3.MoveTowards(transform.position, point, patrolSpeed * Time.deltaTime))
+            .WithOnRun(() => transform.position = (transform.position - point).normalized * patrolSpeed * Time.deltaTime)
             .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall())
             .Build();
     }
