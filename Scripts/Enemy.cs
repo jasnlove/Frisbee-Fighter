@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float stunTimer = 2f;
     private LayerMask discLayer;
     private LayerMask collisionLayer;
+    private LayerMask playerLayer;
 
     private StateMachine enemyBehaviours;
     private StateMachine stayMachine;
@@ -42,6 +43,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         discLayer = LayerMask.GetMask("Disc");
         collisionLayer = LayerMask.GetMask("Collision");
+        playerLayer = LayerMask.GetMask("Player");
         stayMachine = PatrolStates();
         chargeMachine = ChargeStates();
 
@@ -50,24 +52,22 @@ public class Enemy : MonoBehaviour
             .WithOnEnter(() => originalPos = transform.position)
             .WithOnEnter(() => stayMachine.ResetStateMachine())
             .WithOnRun(() => stayMachine.RunStateMachine())
-            .WithTransition(Flee, () => DistanceFromPlayer() <= 4)
+            .WithTransition(Flee, () => DistanceFromPlayer() < 5)
             .WithTransition(Charge, () => priority)
 
             .WithState(Charge)
             .WithOnEnter(() => chargeMachine.ResetStateMachine())
             .WithOnRun(() => chargeMachine.RunStateMachine())
-            .WithTransition(Stay, () => !priority)
-            .WithTransition(Flee, () => Bravery <= 0.5f && player.ReturnCurrentState() == Slam || player.ReturnCurrentState() == SlamHit)
+            .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 6)
 
             .WithState(Flee)
             .WithOnRun(() => MoveAwayFromPlayer())
-            .WithTransition(Charge, () => priority && !(Bravery <= 0.5f && player.ReturnCurrentState() == Slam || player.ReturnCurrentState() == SlamHit))
+            .WithTransition(Charge, () => priority || DistanceFromPlayer() <= 3)
             .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
 
             .WithState(Stunned)
             .WithOnEnter(() => setFreeTime = stunTimer)
             .WithOnRun(() => setFreeTime -= Time.deltaTime)
-            .WithOnRun(() => DetectStun())
             .WithTransition(Flee, () => setFreeTime <= 0)
             .WithTransitionFromAnyState(() => enemyBehaviours.CurrentState.Name != Stunned && DetectStun())
 
@@ -78,6 +78,19 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         enemyBehaviours.RunStateMachine();
+
+        
+    }
+
+    private void HurtPlayer(){
+        if(enemyBehaviours.CurrentState.Name == Stunned) return;
+        Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, transform.localScale.y / 2.0f, playerLayer);
+        foreach (Collider2D c in col)
+        {
+            PlayerController player = c.GetComponent<PlayerController>();
+            if (player != null)
+                player.ChangeHealth(-1);
+        }
     }
 
     private void MoveAwayFromPlayer()
@@ -105,16 +118,6 @@ public class Enemy : MonoBehaviour
             }
         }
         return false;
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        PlayerController player = other.gameObject.GetComponent<PlayerController>();
-
-        if (player != null)
-        {
-            player.ChangeHealth(-1);
-        }
     }
 
     private void OnDestroy(){
