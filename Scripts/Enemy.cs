@@ -13,6 +13,7 @@ namespace FrisbeeThrow
 
         [SerializeField] private float moveSpeed = 6.0f;
         [SerializeField] private float stunTimer = 2f;
+        private LayerMask playerLayer;
         private LayerMask discLayer;
         private LayerMask collisionLayer;
 
@@ -45,6 +46,7 @@ namespace FrisbeeThrow
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
             discLayer = LayerMask.GetMask("Disc");
             collisionLayer = LayerMask.GetMask("Collision");
+            playerLayer = LayerMask.GetMask("Player");
             stayMachine = PatrolStates();
             chargeMachine = ChargeStates();
 
@@ -80,6 +82,14 @@ namespace FrisbeeThrow
         {
             liveTime += 7 * Time.deltaTime;
             enemyBehaviours.RunStateMachine();
+
+            Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, transform.localScale.y / 2.0f, playerLayer);
+            foreach (Collider2D c in col)
+            {
+                PlayerController player = c.GetComponent<PlayerController>();
+                if (player != null)
+                    player.ChangeHealth(-1);
+            }
         }
 
         private void MoveAwayFromPlayer()
@@ -115,6 +125,7 @@ namespace FrisbeeThrow
             return false;
         }
 
+        /*
         private void OnCollisionEnter2D(Collision2D other)
         {
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
@@ -124,6 +135,7 @@ namespace FrisbeeThrow
                 player.ChangeHealth(-1);
             }
         }
+        */
 
         private void OnDestroy(){
             Director.Instance.EnemiesSpawned.Remove(this.gameObject);
