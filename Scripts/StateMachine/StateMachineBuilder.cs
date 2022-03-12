@@ -12,7 +12,7 @@ namespace States
      * Define the states actions using .WithOnEnter, .WithOnRun, .WithOnExit
      * Define the states transition(s) using .WithTransition(nextState : string, Func<bool>)
      * Defining transitions for states that don't exist will not error, but will just produce nothing
-     * Continue this pattern, define the next state with .WithState... and do this until there are no more states.
+     * Repeat this pattern for all states
      * call .Build()
      * EXAMPLE:
      *             StateMachine x = new StateMachineBuilder()
