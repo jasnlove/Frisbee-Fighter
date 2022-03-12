@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlamController : MonoBehaviour
 {
-    [SerializeField] private float damageTimer = 0.5f;
+    [SerializeField] private float damageTimer = 0.1f;
 
     private float timer;
 
