@@ -68,6 +68,7 @@ public class Enemy : MonoBehaviour
             .WithState(Stunned)
             .WithOnEnter(() => setFreeTime = stunTimer)
             .WithOnRun(() => setFreeTime -= Time.deltaTime)
+            .WithOnRun(() => DetectStun())
             .WithTransition(Flee, () => setFreeTime <= 0)
             .WithTransitionFromAnyState(() => enemyBehaviours.CurrentState.Name != Stunned && DetectStun())
 
