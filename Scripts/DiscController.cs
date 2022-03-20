@@ -59,22 +59,22 @@ public class DiscController : MonoBehaviour
     {
         Vector2 launchDirection = direction;
         float radius = Mathf.Max(transform.localScale.x, transform.localScale.y);
-        int iterations = 0;
-        int maxIterations = 180;
-        while (body.velocity.magnitude > Mathf.Epsilon && iterations < maxIterations)
+        Vector2 lastBouncePos = Vector2.zero;
+        while (body.velocity.magnitude > Mathf.Epsilon)
         {
             yield return new WaitForFixedUpdate();
-            RaycastHit2D hit = Physics2D.CircleCast(transform.position, radius * 1.05f, Vector2.zero, 0.0f, collisionLayer);//Checks a circle direction on the player for collisions
-            if (hit) //If the disc hits something, reflect the direction
+            RaycastHit2D hit = Physics2D.CircleCast(transform.position, radius * 0.95f, Vector2.zero, 0.0f, collisionLayer);
+            if (hit && Vector3.SqrMagnitude(hit.point - lastBouncePos) >= 1) //If the disc hits something, reflect the direction
             {
+                lastBouncePos = hit.point;
+                Debug.DrawRay(transform.position, hit.normal, Color.red, 3);
                 if (airborne) //To prevent spamming disc into wall at close range
                     Charge(34);
-                body.velocity = Vector3.Reflect(body.velocity, hit.normal);
+                body.velocity = Vector2.Reflect(body.velocity, hit.normal);
                 pickupReady = true; //Player can only pick it up after it has hit a wall
             }
             body.AddForce(body.velocity * decelSpeed);
             decelSpeed -= 0.02f;
-            iterations++;
         }
         pickupReady = true; //Player can also pick it up after it stops moving
     }
