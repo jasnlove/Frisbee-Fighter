@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eda08fb53f0e10047973c0c2c2283aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 7
   launchSpeed: 30
   slamDelay: 0.6
   timeInvincible: 0.5

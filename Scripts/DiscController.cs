@@ -11,6 +11,9 @@ public class DiscController : MonoBehaviour
     public bool pickupReady = false;
     private Rigidbody2D body;
     private float decelSpeed = -0.8f;
+    private float airTimeReq = 0.05f;
+    private float airTimer;
+    private bool airborne = false;
     private PlayerController player;
     private SpriteRenderer rend;
 
@@ -19,6 +22,7 @@ public class DiscController : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         rend = GetComponent<SpriteRenderer>();
+        airTimer = airTimeReq;
     }
 
     private void Update()
@@ -33,6 +37,13 @@ public class DiscController : MonoBehaviour
             rend.sprite = discSprite;
             hyperDisc = false;
             Charge(0);
+        }
+
+        if (!airborne)
+        {
+            airTimer -= Time.deltaTime;
+            if (airTimer <= 0)
+                airborne = true;
         }
     }
 
@@ -56,7 +67,8 @@ public class DiscController : MonoBehaviour
             RaycastHit2D hit = Physics2D.CircleCast(transform.position, radius * 1.05f, Vector2.zero, 0.0f, collisionLayer);//Checks a circle direction on the player for collisions
             if (hit) //If the disc hits something, reflect the direction
             {
-                Charge(34);
+                if (airborne) //To prevent spamming disc into wall at close range
+                    Charge(34);
                 body.velocity = Vector3.Reflect(body.velocity, hit.normal);
                 pickupReady = true; //Player can only pick it up after it has hit a wall
             }
