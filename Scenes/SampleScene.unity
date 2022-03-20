@@ -9167,7 +9167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &941408934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9496,7 +9496,7 @@ MonoBehaviour:
   - {fileID: 2109585660}
   EnemiesSpawned: []
   HyperTosses: 0
-  SuperSlams: 0
+  SuperSlams: 25000
   _durationBetweenWaves: 15
   _enemiesToSpawn: 2
   _spawnDistanceFromPlayer: 5
