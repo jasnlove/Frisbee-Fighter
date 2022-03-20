@@ -156,7 +156,7 @@ public class PlayerController : MonoBehaviour
             if (disc && disc.pickupReady)
             {
                 if (disc.hyperDisc)
-                    discCharge = 0;
+                    ChangeCharge(0);
                 Destroy(disc.gameObject);
                 return true;
             }
