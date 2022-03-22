@@ -19,6 +19,9 @@ public class DiscController : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         rend = GetComponent<SpriteRenderer>();
+
+        // Change player sprite to default
+        ChangeSprite(0);
     }
 
     private void Update()
@@ -33,6 +36,9 @@ public class DiscController : MonoBehaviour
     {
         body.velocity = (direction * speed);
         StartCoroutine(TestLaunch(direction, collisionLayer));
+
+        // Change sprite to thrown version.
+        ChangeSprite(1);
     }
 
     //It also allows us to more easily set when a disc is ready to grab
@@ -63,5 +69,10 @@ public class DiscController : MonoBehaviour
     public void Charge(int amount)
     {
         player.ChangeCharge(amount);
+    }
+
+    public void ChangeSprite(int status)
+    {
+        player.spriteRenderer.sprite = player.spriteArray[status];
     }
 }

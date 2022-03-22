@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using States;
 using static PlayerStateNames; //See new StateNames class under the StateMachine folder.
-
 [RequireComponent(typeof(PlayerInput))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -18,6 +17,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask discLayer;
     [SerializeField] private LayerMask collisionLayer = 3;
 
+    [SerializeField] public SpriteRenderer spriteRenderer;
+    [SerializeField] public Sprite[] spriteArray;
     private Rigidbody2D body;
 
     private InputActionMap map;
@@ -56,8 +57,8 @@ public class PlayerController : MonoBehaviour
         //See documentation in statemachine folder
         stateMachine = new StateMachineBuilder()
             .WithState(HasDisc)
-            .WithOnEnter( () => toss.performed += ThrowDisc)
-            .WithOnExit( () => toss.performed -= ThrowDisc)
+            .WithOnEnter(() => toss.performed += ThrowDisc)
+            .WithOnExit(() => toss.performed -= ThrowDisc)
             .WithTransition(NoDisc, () => { return toss.triggered; })
             .WithTransition(Slam, () => { return slam.triggered; })
 
@@ -65,13 +66,13 @@ public class PlayerController : MonoBehaviour
             .WithTransition(HasDisc, () => { return CheckForDisc(); })
 
             .WithState(Slam)
-            .WithOnEnter( () => { OnSlam(); })
+            .WithOnEnter(() => { OnSlam(); })
             .WithOnRun(() => slamTimer -= Time.deltaTime)
-            .WithTransition(SlamHit, ()=> { return slamTimer <= 0;})
+            .WithTransition(SlamHit, () => { return slamTimer <= 0; })
 
             .WithState(SlamHit)
-            .WithOnEnter( () => { EndSlam(); })
-            .WithTransition(HasDisc, () => { return true;})
+            .WithOnEnter(() => { EndSlam(); })
+            .WithTransition(HasDisc, () => { return true; })
 
             .Build();
     }
@@ -188,4 +189,5 @@ public class PlayerController : MonoBehaviour
     {
         return discCharge;
     }
+
 }
