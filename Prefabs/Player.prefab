@@ -112,7 +112,7 @@ MonoBehaviour:
   collisionLayer:
     serializedVersion: 2
     m_Bits: 8
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 5272338061589321684}
   spriteArray:
   - {fileID: 21300000, guid: 839e66cc4ebd33a4a8d6360be86af4a5, type: 3}
   - {fileID: 21300000, guid: 9a36450ada8b2234f992dcedbf836bc5, type: 3}

@@ -158,6 +158,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (disc.hyperDisc)
                     ChangeCharge(0);
+                spriteRenderer.sprite = spriteArray[0];
                 Destroy(disc.gameObject);
                 return true;
             }
