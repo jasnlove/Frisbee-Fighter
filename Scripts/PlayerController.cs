@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
             .WithTransition(SlamHit, () => { return slamTimer <= 0; })
 
             .WithState(SlamHit)
-            .WithOnEnter(() => { EndSlam(); })
+            .WithOnEnter(() => { EndSlam(); Director.Instance.SuperSlams++; })
             .WithTransition(HasDisc, () => { return true; })
 
             .Build();
@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
             GameObject discObject = Instantiate(hyperDiscPrefab, body.position, Quaternion.identity);
             DiscController disc = discObject.GetComponent<DiscController>();
             disc.Launch(launchDirection, launchSpeed, collisionLayer);
+            Director.Instance.HyperTosses++;
         }
         else
         {
@@ -156,7 +157,7 @@ public class PlayerController : MonoBehaviour
             if (disc && disc.pickupReady)
             {
                 if (disc.hyperDisc)
-                    discCharge = 0;
+                    ChangeCharge(0);
                 Destroy(disc.gameObject);
                 return true;
             }
@@ -182,6 +183,8 @@ public class PlayerController : MonoBehaviour
     public void ChangeCharge(int amount)
     {
         discCharge = Mathf.Clamp(discCharge + amount, 0, 100);
+        if (amount == 0)
+            discCharge = 0;
         Debug.Log("Disc Charge: " + discCharge + "/100");
     }
 
@@ -189,5 +192,6 @@ public class PlayerController : MonoBehaviour
     {
         return discCharge;
     }
+
 
 }

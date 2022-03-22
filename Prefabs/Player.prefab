@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eda08fb53f0e10047973c0c2c2283aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  launchSpeed: 25
+  speed: 7
+  launchSpeed: 30
   slamDelay: 0.6
   timeInvincible: 0.5
   maxHealth: 5
@@ -151,7 +151,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
+  m_Size: {x: 0.75, y: 1.5}
   m_Direction: 0
 --- !u!114 &5272338061423067825
 MonoBehaviour:

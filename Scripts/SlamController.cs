@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlamController : MonoBehaviour
 {
-    [SerializeField] private float damageTimer = 0.5f;
+    [SerializeField] private float damageTimer = 0.1f;
 
     private float timer;
 
@@ -27,7 +27,7 @@ public class SlamController : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        FrisbeeThrow.Enemy enemy = collider.GetComponent<FrisbeeThrow.Enemy>();
+        Enemy enemy = collider.GetComponent<Enemy>();
         if (enemy != null)
             Destroy(collider.gameObject);
     }
