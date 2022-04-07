@@ -20,6 +20,7 @@ public class Director : MonoBehaviour
     [SerializeField] private float _priorityCalculationDelay = 5;
 
     [SerializeField] int totalWaves = 3;
+    [SerializeField] string nextLevel;
 
     [Header("Enemies")]
     [SerializeField] private GameObject[] _enemies;
@@ -64,9 +65,8 @@ public class Director : MonoBehaviour
 
         if (_wave == totalWaves && EnemiesSpawned.Count == 0)
         {
-            Debug.Log("Level transition");
-            //Change 'NextLevel' to name of the next scene
-            //SceneManager.LoadScene("NextLevel");
+            //Level transition
+            SceneManager.LoadScene(nextLevel);
         }
     }
 
