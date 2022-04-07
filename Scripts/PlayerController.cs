@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
         discCharge = Mathf.Clamp(discCharge + amount, 0, 100);
         if (amount == 0)
             discCharge = 0;
-        Debug.Log("Disc Charge: " + discCharge + "/100");
+        //ebug.Log("Disc Charge: " + discCharge + "/100");
     }
 
     public int GetCharge()

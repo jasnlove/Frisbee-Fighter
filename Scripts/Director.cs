@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Linq;
 using States;
@@ -18,6 +19,8 @@ public class Director : MonoBehaviour
     [SerializeField] private int _enemiesWithPriority = 1;
     [SerializeField] private float _priorityCalculationDelay = 5;
 
+    [SerializeField] int totalWaves = 3;
+
     [Header("Enemies")]
     [SerializeField] private GameObject[] _enemies;
 
@@ -28,6 +31,8 @@ public class Director : MonoBehaviour
     private float _timer;
     private GameObject _player;
     private float _priorityTimer = 0;
+
+    private int _wave = 0;
 
     private void Awake(){
         if(Instance == null)
@@ -44,6 +49,7 @@ public class Director : MonoBehaviour
             .WithState(SpawnWave)
             .WithOnEnter(() => HandlePriority())
             .WithOnEnter(() => SpawnEnemies())
+            .WithOnEnter(() => { _wave += 1; })
             .WithTransition(InWave, () => true)
             .Build();
     }
@@ -55,6 +61,13 @@ public class Director : MonoBehaviour
         }
         _priorityTimer -= Time.deltaTime;
         _waveStateMachine.RunStateMachine();
+
+        if (_wave == totalWaves && EnemiesSpawned.Count == 0)
+        {
+            Debug.Log("Level transition");
+            //Change 'NextLevel' to name of the next scene
+            //SceneManager.LoadScene("NextLevel");
+        }
     }
 
     private void SpawnEnemies(){
