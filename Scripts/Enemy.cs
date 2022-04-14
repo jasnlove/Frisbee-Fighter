@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
     private PlayerController player;
     private Rigidbody2D rb;
     private float setFreeTime;
-    
+
     [Header("Charge state information")]
     [SerializeField] private float chargeSpeed;
     [SerializeField] private Vector2 locationalError;
@@ -30,10 +30,15 @@ public class Enemy : MonoBehaviour
     private float timer;
     private Vector3 chargeDir;
     private Vector3 chargePoint;
-    
+
     [Header("Patrol state information")]
     [SerializeField] private float patrolSpeed = 1.5f;
     [SerializeField] private float patrolRadius = 2f;
+
+    [Header("Sprite List")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite[] spriteList;
+
     private Vector3 originalPos;
     private Vector3 point;
 
@@ -46,6 +51,8 @@ public class Enemy : MonoBehaviour
         playerLayer = LayerMask.GetMask("Player");
         stayMachine = PatrolStates();
         chargeMachine = ChargeStates();
+
+        spriteRenderer.sprite = spriteList[1];
 
         enemyBehaviours = new StateMachineBuilder()
             .WithState(Stay)
@@ -82,10 +89,25 @@ public class Enemy : MonoBehaviour
     {
         HurtPlayer();
         enemyBehaviours.RunStateMachine();
+
+        if (enemyBehaviours.CurrentState.Name != Stunned)
+        {
+            spriteRenderer.sprite = spriteList[1];
+        }
+
+        if (LeftOfPlayer())
+        {
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            spriteRenderer.flipX = false;
+        }
     }
 
-    private void HurtPlayer(){
-        if(enemyBehaviours.CurrentState.Name == Stunned) return;
+    private void HurtPlayer()
+    {
+        if (enemyBehaviours.CurrentState.Name == Stunned) return;
         Collider2D[] col = Physics2D.OverlapCircleAll(transform.position, transform.localScale.y / 2.0f, playerLayer);
         foreach (Collider2D c in col)
         {
@@ -105,6 +127,11 @@ public class Enemy : MonoBehaviour
         return Mathf.Abs((player.transform.position - transform.position).magnitude);
     }
 
+    // Returns true if this enemy is left of the player, false otherwise.  Useful for sprite flipping.
+    private bool LeftOfPlayer()
+    {
+        return player.transform.position.x < transform.position.x;
+    }
     private bool DetectStun()
     {
         Collider2D[] col = Physics2D.OverlapBoxAll(transform.position, transform.localScale, discLayer);
@@ -116,29 +143,46 @@ public class Enemy : MonoBehaviour
                 disc.Charge(34);
                 if (disc.hyperDisc)
                     Destroy(gameObject);
+
+                // Handle sprite update
+                spriteRenderer.sprite = spriteList[3];
+                if (LeftOfPlayer())
+                {
+                    spriteRenderer.flipX = true;
+                }
+                else
+                {
+                    spriteRenderer.flipX = false;
+                }
+
                 return true;
             }
         }
         return false;
     }
 
-    private void OnDestroy(){
+    private void OnDestroy()
+    {
         Director.Instance.EnemiesSpawned.Remove(this.gameObject);
     }
 
-    private Vector3 SetPointAroundSpotWithError(Vector3 point, Vector2 bounds){
+    private Vector3 SetPointAroundSpotWithError(Vector3 point, Vector2 bounds)
+    {
         return point + new Vector3(Random.Range(-bounds.x, bounds.x), Random.Range(-bounds.y, bounds.y), 0);
     }
 
-    private Vector3 SetPointAroundSpotWithError(Vector3 point, float radius){
+    private Vector3 SetPointAroundSpotWithError(Vector3 point, float radius)
+    {
         return point + new Vector3(Random.Range(-radius, radius), Random.Range(-radius, radius), 0);
     }
 
-    private bool DetectWall(){
+    private bool DetectWall()
+    {
         return Physics2D.OverlapBox(transform.position, transform.localScale, 0, collisionLayer);
     }
 
-    private StateMachine ChargeStates(){
+    private StateMachine ChargeStates()
+    {
         return new StateMachineBuilder()
             .WithState(SetPointCharge)
             .WithOnEnter(() => chargePoint = SetPointAroundSpotWithError(player.transform.position, locationalError))
@@ -149,11 +193,12 @@ public class Enemy : MonoBehaviour
             .WithState(ChargeToPoint)
             .WithOnRun(() => timer -= Time.deltaTime)
             .WithOnRun(() => transform.position += chargeDir * chargeSpeed * Time.deltaTime)
-            .WithTransition(SetPointCharge, () => ((timer <= 0 &&  Vector3.Magnitude(transform.position - player.transform.position) >= 5)) || DetectWall())
+            .WithTransition(SetPointCharge, () => ((timer <= 0 && Vector3.Magnitude(transform.position - player.transform.position) >= 5)) || DetectWall())
             .Build();
     }
 
-    private StateMachine PatrolStates(){
+    private StateMachine PatrolStates()
+    {
         return new StateMachineBuilder()
             .WithState(SetPoint)
             .WithOnEnter(() => point = SetPointAroundSpotWithError(originalPos, patrolRadius))
@@ -165,9 +210,11 @@ public class Enemy : MonoBehaviour
             .Build();
     }
 
-    private void OnDrawGizmos(){
-        if(enemyBehaviours == null) return;
-        if(enemyBehaviours.CurrentState.Name == Stay){
+    private void OnDrawGizmos()
+    {
+        if (enemyBehaviours == null) return;
+        if (enemyBehaviours.CurrentState.Name == Stay)
+        {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(originalPos, patrolRadius);
         }
