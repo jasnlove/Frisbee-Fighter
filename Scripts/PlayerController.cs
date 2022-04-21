@@ -179,6 +179,10 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log("Health: " + currentHealth + "/" + maxHealth);
+        // add code to check if health is 0
+        if (currentHealth == 0) {
+            pauseMenu.GameOver();
+        }
     }
 
     public void ChangeCharge(int amount)

@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;
+    // public static bool GameIsOver = false;
+    public GameObject GameOverUI;
     public GameObject PauseMenuUI;
     public PlayerInput player;
 
@@ -36,6 +38,19 @@ public class PauseMenu : MonoBehaviour
         PauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+    }
+
+    public void GameOver () 
+    {
+        player.DeactivateInput();
+        GameOverUI.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void RestartGame() 
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadSceneAsync("Level1");
     }
 
     public void ExitGame()
