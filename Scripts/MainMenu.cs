@@ -7,9 +7,16 @@ using UnityEngine.InputSystem;
 public class MainMenu : MonoBehaviour
 {
     public PlayerInput player;
+
     public void StartGame()
     {
         Time.timeScale = 1f;
         SceneManager.LoadSceneAsync("Level1");
+    }
+
+    public void StartInfiniteLevel()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadSceneAsync("LevelInfinite");
     }
 }
