@@ -19,4 +19,9 @@ public class MainMenu : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadSceneAsync("LevelInfinite");
     }
+
+    public void Menu()
+    {
+        SceneManager.LoadSceneAsync("MainMenu");
+    }
 }
