@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using States;
 using static PlayerStateNames; //See new StateNames class under the StateMachine folder.
 [RequireComponent(typeof(PlayerInput))]
@@ -24,6 +25,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public Sprite[] spriteArray;
     private Rigidbody2D body;
     private AudioSource audioSource;
+
+    public GameObject[] hearts;
 
     private InputActionMap map;
     private InputAction mousePos;
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        UpdateHealthBar();
         stateMachine.RunStateMachine();
         input = movement.ReadValue<Vector2>();
 
@@ -203,6 +207,21 @@ public class PlayerController : MonoBehaviour
     public int GetCharge()
     {
         return discCharge;
+    }
+
+    private void UpdateHealthBar()
+    {
+        for (int i = 0; i < maxHealth; i++)
+        {
+            if (i < currentHealth)
+            {
+                hearts[i].SetActive(true);
+            }
+            else
+            {
+                hearts[i].SetActive(false);
+            }
+        }
     }
 
 
