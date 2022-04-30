@@ -42,6 +42,8 @@ public class Enemy : MonoBehaviour
     private Vector3 originalPos;
     private Vector3 point;
 
+    [SerializeField] private GameObject explosion;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -163,6 +165,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDestroy()
     {
+        Instantiate(explosion);
         Director.Instance.EnemiesSpawned.Remove(this.gameObject);
     }
 
