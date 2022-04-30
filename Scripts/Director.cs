@@ -32,25 +32,26 @@ public class Director : MonoBehaviour
     private float _timer;
     private GameObject _player;
     private float _priorityTimer = 0;
+    private bool _levelStart = true;
 
     private int _wave = 0;
 
-    private void Awake(){
-        if(Instance == null)
+    private void Awake() {
+        if (Instance == null)
             Instance = this;
         else
             Destroy(this);
         _player = GameObject.FindGameObjectWithTag("Player");
         _waveStateMachine = new StateMachineBuilder()
             .WithState(InWave)
-            .WithOnEnter(() => _timer = _durationBetweenWaves)
+            .WithOnEnter(() => {if (!_levelStart) _timer = _durationBetweenWaves; else _timer = 0; _levelStart = false; })
             .WithOnRun(() => {_timer -= Time.deltaTime; if(EnemiesSpawned.Count == 0) _timer -= Time.deltaTime; })
             .WithTransition(SpawnWave, () => _timer <= 0)
 
             .WithState(SpawnWave)
             .WithOnEnter(() => HandlePriority())
-            .WithOnEnter(() => SpawnEnemies())
-            .WithOnEnter(() => { _wave += 1; })
+            .WithOnEnter(() => { if (_wave < totalWaves) SpawnEnemies(); })
+            .WithOnEnter(() => { if (_wave < totalWaves) _wave += 1; })
             .WithTransition(InWave, () => true)
             .Build();
     }
@@ -63,7 +64,9 @@ public class Director : MonoBehaviour
         _priorityTimer -= Time.deltaTime;
         _waveStateMachine.RunStateMachine();
 
-        if (_wave == totalWaves && EnemiesSpawned.Count == 0)
+        //Debug.Log("Wave: " + _wave);
+        //Debug.Log("Enemies: " + EnemiesSpawned.Count);
+        if (_wave >= totalWaves && EnemiesSpawned.Count == 0)
         {
             //Level transition
             SceneManager.LoadScene(nextLevel);
