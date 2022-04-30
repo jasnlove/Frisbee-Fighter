@@ -11192,12 +11192,12 @@ MonoBehaviour:
   EnemiesSpawned: []
   HyperTosses: 0
   SuperSlams: 25000
-  _durationBetweenWaves: 15
-  _enemiesToSpawn: 2
+  _durationBetweenWaves: 7
+  _enemiesToSpawn: 3
   _spawnDistanceFromPlayer: 5
   _enemiesWithPriority: 1
   _priorityCalculationDelay: 5
-  totalWaves: 3
+  totalWaves: 5
   nextLevel: Level7
   _enemies:
   - {fileID: 7230255286399551203, guid: 4293b0bf3599ebb4ab2ee54271bed24b, type: 3}
