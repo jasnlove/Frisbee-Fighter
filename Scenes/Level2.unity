@@ -5585,7 +5585,7 @@ MonoBehaviour:
   EnemiesSpawned: []
   HyperTosses: 0
   SuperSlams: 25000
-  _durationBetweenWaves: 15
+  _durationBetweenWaves: 17
   _enemiesToSpawn: 3
   _spawnDistanceFromPlayer: 5
   _enemiesWithPriority: 1
