@@ -16,10 +16,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject slamPrefab;
     [SerializeField] private LayerMask discLayer;
     [SerializeField] private LayerMask collisionLayer = 3;
+    [SerializeField] private AudioClip tossAudio;
+    [SerializeField] private AudioClip hyperTossAudio;
+    [SerializeField] private AudioClip damageAudio;
 
     [SerializeField] public SpriteRenderer spriteRenderer;
     [SerializeField] public Sprite[] spriteArray;
     private Rigidbody2D body;
+    private AudioSource audioSource;
 
     private InputActionMap map;
     private InputAction mousePos;
@@ -45,6 +49,7 @@ public class PlayerController : MonoBehaviour
         invincibleTimer = timeInvincible;
         map = GetComponent<PlayerInput>().currentActionMap;
         body = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         movement = map.FindAction("Movement");
         toss = map.FindAction("Toss");
         mousePos = map.FindAction("MousePosition");
@@ -119,6 +124,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(1) && discCharge >= 100)
         {
+            audioSource.PlayOneShot(hyperTossAudio);
             GameObject discObject = Instantiate(hyperDiscPrefab, body.position, Quaternion.identity);
             DiscController disc = discObject.GetComponent<DiscController>();
             disc.Launch(launchDirection, launchSpeed, collisionLayer);
@@ -126,6 +132,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            audioSource.PlayOneShot(tossAudio);
             GameObject discObject = Instantiate(discPrefab, body.position, Quaternion.identity);
             DiscController disc = discObject.GetComponent<DiscController>();
             disc.Launch(launchDirection, launchSpeed, collisionLayer);
@@ -179,7 +186,7 @@ public class PlayerController : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         Debug.Log("Health: " + currentHealth + "/" + maxHealth);
-        // add code to check if health is 0
+        audioSource.PlayOneShot(damageAudio);
         if (currentHealth == 0) {
             pauseMenu.GameOver();
         }
