@@ -18,7 +18,7 @@ public class Director : MonoBehaviour
     [SerializeField] private int _enemiesToSpawn = 2;
     [SerializeField] private float _spawnDistanceFromPlayer = 5;
     [SerializeField] private int _enemiesWithPriority = 1;
-    [SerializeField] private float _priorityCalculationDelay = 5;
+    [SerializeField] private float _priorityCalculationDelay = 2;
 
     [SerializeField] int totalWaves = 3;
     [SerializeField] string nextLevel;
@@ -56,6 +56,7 @@ public class Director : MonoBehaviour
 
             .WithState(SpawnWave)
             .WithOnEnter(() => HandlePriority())
+            .WithOnEnter(() => _enemiesWithPriority++)
             .WithOnEnter(() => { if (_wave < totalWaves) SpawnEnemies(); })
             .WithOnEnter(() => { if (_wave < totalWaves) _wave += 1; })
             .WithTransition(InWave, () => true)
@@ -122,7 +123,7 @@ public class Director : MonoBehaviour
         if(EnemiesSpawned.Count == 0){
             return;
         }
-        for(int i = 0; i < _enemiesWithPriority; i++){
+        for(int i = 0; i < EnemiesSpawned.Count && i < _enemiesWithPriority; i++){
             EnemiesSpawned[i].GetComponent<Enemy>().priority = true;
         }
     }

@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour
             .WithTransition(Charge, () => priority)
 
             .WithState(Charge)
-            .WithOnEnter(() => choice = Random.Range(0,4))
+            .WithOnEnter(() => choice = Random.Range(0,2))
             .WithOnEnter(() => chargeMachine.ResetStateMachine())
             .WithOnRun(() => AttackChoice(choice))
             .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
@@ -124,7 +124,7 @@ public class Enemy : MonoBehaviour
 
     private void MoveAwayFromPlayer()
     {
-        transform.position = transform.position + (transform.position - player.transform.position).normalized * moveSpeed * Time.deltaTime;
+        transform.position = transform.position + (transform.position - player.transform.position).normalized * moveSpeed * 2 * Time.deltaTime;
     }
 
     private float DistanceFromPlayer()
@@ -214,7 +214,7 @@ public class Enemy : MonoBehaviour
             case 0:
                 ChasePlayer();
                 break;
-            default:
+            case 1:
                 chargeMachine.RunStateMachine();
                 break;
         }

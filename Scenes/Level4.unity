@@ -7405,7 +7405,7 @@ MonoBehaviour:
   - {fileID: 765210795}
   EnemiesSpawned: []
   HyperTosses: 0
-  SuperSlams: 25000
+  SuperSlams: 0
   _durationBetweenWaves: 15
   _enemiesToSpawn: 4
   _spawnDistanceFromPlayer: 5
@@ -11040,7 +11040,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
-  m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
