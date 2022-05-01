@@ -32,6 +32,7 @@ public class Director : MonoBehaviour
     private float _timer;
     private GameObject _player;
     private float _priorityTimer = 0;
+    private float _levelTimer = 2.0f;
     private bool _levelStart = true;
 
     private int _wave = 0;
@@ -64,12 +65,11 @@ public class Director : MonoBehaviour
         _priorityTimer -= Time.deltaTime;
         _waveStateMachine.RunStateMachine();
 
-        //Debug.Log("Wave: " + _wave);
-        //Debug.Log("Enemies: " + EnemiesSpawned.Count);
         if (_wave >= totalWaves && EnemiesSpawned.Count == 0)
         {
-            //Level transition
-            SceneManager.LoadScene(nextLevel);
+            _levelTimer -= Time.deltaTime;
+            if (_levelTimer <= 0)
+                SceneManager.LoadScene(nextLevel);
         }
     }
 
