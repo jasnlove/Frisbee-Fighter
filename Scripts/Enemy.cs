@@ -67,7 +67,7 @@ public class Enemy : MonoBehaviour
             .WithTransition(Charge, () => priority)
 
             .WithState(Charge)
-            .WithOnEnter(() => choice = Random.Range(0,2))
+            .WithOnEnter(() => choice = Random.Range(0,4))
             .WithOnEnter(() => chargeMachine.ResetStateMachine())
             .WithOnRun(() => AttackChoice(choice))
             .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
@@ -214,7 +214,7 @@ public class Enemy : MonoBehaviour
             case 0:
                 ChasePlayer();
                 break;
-            case 1:
+            default:
                 chargeMachine.RunStateMachine();
                 break;
         }
@@ -231,16 +231,6 @@ public class Enemy : MonoBehaviour
             .WithOnRun(() => transform.position = Vector3.MoveTowards(transform.position, point, patrolSpeed * Time.deltaTime))
             .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall() || Vector3.Magnitude(transform.position - point) <= 0.05f)
             .Build();
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (enemyBehaviours == null) return;
-        if (enemyBehaviours.CurrentState.Name == Stay)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(originalPos, patrolRadius);
-        }
     }
 
     public void Explode()

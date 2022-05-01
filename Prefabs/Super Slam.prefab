@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7752339358187104955}
   - component: {fileID: 4460148749732117920}
   - component: {fileID: 7752339358187104954}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Super Slam
   m_TagString: Untagged
   m_Icon: {fileID: 0}

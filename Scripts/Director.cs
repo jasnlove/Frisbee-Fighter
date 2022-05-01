@@ -126,11 +126,5 @@ public class Director : MonoBehaviour
             EnemiesSpawned[i].GetComponent<Enemy>().priority = true;
         }
     }
-
-    private void OnDrawGizmos(){
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(GameObject.FindGameObjectWithTag("Player").transform.position, _spawnDistanceFromPlayer);
-    }
-
 }
 

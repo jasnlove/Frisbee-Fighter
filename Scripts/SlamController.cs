@@ -12,6 +12,7 @@ public class SlamController : MonoBehaviour
     void Start()
     {
         timer = damageTimer;
+        Overlap();
     }
 
     // Update is called once per frame
@@ -22,6 +23,13 @@ public class SlamController : MonoBehaviour
         if (timer < 0)
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void Overlap(){
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, transform.localScale.x, LayerMask.GetMask("Enemy"));
+        foreach(Collider2D col in cols){
+            Destroy(col.gameObject);
         }
     }
 
