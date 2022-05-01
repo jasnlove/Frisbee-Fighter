@@ -144,7 +144,10 @@ public class Enemy : MonoBehaviour
             {
                 disc.Charge(34);
                 if (disc.hyperDisc)
+                {
+                    Explode();
                     Destroy(gameObject);
+                }
 
                 // Handle sprite update
                 spriteRenderer.sprite = spriteList[3];
@@ -165,7 +168,6 @@ public class Enemy : MonoBehaviour
 
     private void OnDestroy()
     {
-        Instantiate(explosion);
         Director.Instance.EnemiesSpawned.Remove(this.gameObject);
     }
 
@@ -221,5 +223,10 @@ public class Enemy : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(originalPos, patrolRadius);
         }
+    }
+
+    public void Explode()
+    {
+        Instantiate(explosion);
     }
 }

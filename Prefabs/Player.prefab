@@ -120,6 +120,12 @@ MonoBehaviour:
   spriteArray:
   - {fileID: 21300000, guid: 61e3dc5e609aee04aa676d14d7567eb1, type: 3}
   - {fileID: 21300000, guid: 99142fb382b22a242af0f81d6685639f, type: 3}
+  hearts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!50 &5272338061589321681
 Rigidbody2D:
   serializedVersion: 4

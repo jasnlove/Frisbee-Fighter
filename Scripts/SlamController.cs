@@ -29,6 +29,9 @@ public class SlamController : MonoBehaviour
     {
         Enemy enemy = collider.GetComponent<Enemy>();
         if (enemy != null)
+        {
+            enemy.Explode();
             Destroy(collider.gameObject);
+        }
     }
 }
