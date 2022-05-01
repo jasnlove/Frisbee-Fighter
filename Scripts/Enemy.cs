@@ -44,6 +44,8 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private GameObject explosion;
 
+    private int choice = 0;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -65,8 +67,9 @@ public class Enemy : MonoBehaviour
             .WithTransition(Charge, () => priority)
 
             .WithState(Charge)
+            .WithOnEnter(() => choice = Random.Range(0,2))
             .WithOnEnter(() => chargeMachine.ResetStateMachine())
-            .WithOnRun(() => chargeMachine.RunStateMachine())
+            .WithOnRun(() => AttackChoice(choice))
             .WithTransition(Stay, () => !priority && DistanceFromPlayer() >= 5)
             .WithTransition(Flee, () => priority && Bravery <= 0.5 && (player.ReturnCurrentState() == Slam || player.ReturnCurrentState() == SlamHit))
 
@@ -200,6 +203,21 @@ public class Enemy : MonoBehaviour
             .WithOnRun(() => transform.position += chargeDir * chargeSpeed * Time.deltaTime)
             .WithTransition(SetPointCharge, () => ((timer <= 0 && Vector3.Magnitude(transform.position - player.transform.position) >= 5)) || DetectWall())
             .Build();
+    }
+
+    private void ChasePlayer(){
+         transform.position = transform.position - (transform.position - player.transform.position).normalized * moveSpeed * Time.deltaTime;
+    }
+
+    private void AttackChoice(int choice){
+        switch(choice){
+            case 0:
+                ChasePlayer();
+                break;
+            case 1:
+                chargeMachine.RunStateMachine();
+                break;
+        }
     }
 
     private StateMachine PatrolStates()

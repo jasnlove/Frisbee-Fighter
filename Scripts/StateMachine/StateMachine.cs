@@ -26,6 +26,7 @@ namespace States
 
         public void ResetStateMachine(){
             CurrentState = _startingState;
+            CurrentState.InitializeState();
         }
 
         public void RunStateMachine()
