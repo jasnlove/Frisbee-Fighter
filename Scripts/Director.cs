@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using States;
@@ -21,6 +22,10 @@ public class Director : MonoBehaviour
 
     [SerializeField] int totalWaves = 3;
     [SerializeField] string nextLevel;
+    [SerializeField] Text waveText;
+    [SerializeField] Text levelText;
+    [SerializeField] Text winText;
+    [SerializeField] string currentLevel;
 
     [Header("Enemies")]
     [SerializeField] private GameObject[] _enemies;
@@ -55,6 +60,8 @@ public class Director : MonoBehaviour
             .WithOnEnter(() => { if (_wave < totalWaves) _wave += 1; })
             .WithTransition(InWave, () => true)
             .Build();
+
+        levelText.text = "Level: " + currentLevel;
     }
 
     private void Update(){
@@ -67,10 +74,13 @@ public class Director : MonoBehaviour
 
         if (_wave >= totalWaves && EnemiesSpawned.Count == 0)
         {
+            winText.text = "Level Complete";
             _levelTimer -= Time.deltaTime;
             if (_levelTimer <= 0)
                 SceneManager.LoadScene(nextLevel);
         }
+
+        waveText.text = "Wave: " + _wave;
     }
 
     private void SpawnEnemies(){
