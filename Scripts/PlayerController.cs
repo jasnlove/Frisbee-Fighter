@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
         slam = map.FindAction("Slam");
         pause = map.FindAction("Pause");
         pauseMenu = GameObject.FindObjectOfType<PauseMenu>();
-        pause.performed += ctx => pauseMenu.CheckPause();
+        pause.performed += pauseMenu.CheckPause;
         slamTimer = slamDelay;
 
         //See documentation in statemachine folder
@@ -226,5 +226,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    private void OnDestroy(){
+        pause.performed -= pauseMenu.CheckPause;
+        toss.performed -= ThrowDisc;
+    }
 }

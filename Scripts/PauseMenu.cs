@@ -16,7 +16,7 @@ public class PauseMenu : MonoBehaviour
         player = GameObject.FindObjectOfType<PlayerController>().GetComponent<PlayerInput>();
     }
 
-    public void CheckPause()
+    public void CheckPause(InputAction.CallbackContext ctx)
     {
         if (GameIsPaused)
             ResumeGame();
