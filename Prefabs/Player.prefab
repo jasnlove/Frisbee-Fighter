@@ -116,6 +116,7 @@ MonoBehaviour:
   tossAudio: {fileID: 8300000, guid: e8c60c56aa6fcaf4d9f9bc9da5d76c79, type: 3}
   hyperTossAudio: {fileID: 8300000, guid: 2d922f1d21c655648b85f0f210ff82d8, type: 3}
   damageAudio: {fileID: 8300000, guid: 7ea8eba87ef158f47870389b84cd462a, type: 3}
+  jumpAudio: {fileID: 8300000, guid: 3368fb8a107d37b45941837d9629f113, type: 3}
   spriteRenderer: {fileID: 5272338061589321684}
   spriteArray:
   - {fileID: 21300000, guid: 61e3dc5e609aee04aa676d14d7567eb1, type: 3}
@@ -205,7 +206,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.4
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0

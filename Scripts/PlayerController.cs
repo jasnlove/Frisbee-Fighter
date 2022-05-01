@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip tossAudio;
     [SerializeField] private AudioClip hyperTossAudio;
     [SerializeField] private AudioClip damageAudio;
+    [SerializeField] private AudioClip jumpAudio;
 
     [SerializeField] public SpriteRenderer spriteRenderer;
     [SerializeField] public Sprite[] spriteArray;
@@ -145,6 +146,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnSlam()
     {
+        audioSource.PlayOneShot(jumpAudio, 0.6f);
         speed = speed / 2.0f;
         slamTimer = slamDelay;
         isInvincible = true;
