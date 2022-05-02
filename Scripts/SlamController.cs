@@ -27,8 +27,10 @@ public class SlamController : MonoBehaviour
     }
 
     private void Overlap(){
-        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, transform.localScale.x, LayerMask.GetMask("Enemy"));
+        Collider2D[] cols = Physics2D.OverlapCircleAll(transform.position, transform.localScale.x / 2, LayerMask.GetMask("Enemy"));
         foreach(Collider2D col in cols){
+            Enemy enemy = col.GetComponent<Enemy>();
+            enemy.Explode();
             Destroy(col.gameObject);
         }
     }
