@@ -24,4 +24,9 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadSceneAsync("MainMenu");
     }
+
+    public void Controls()
+    {
+        SceneManager.LoadSceneAsync("Controls");
+    }
 }
