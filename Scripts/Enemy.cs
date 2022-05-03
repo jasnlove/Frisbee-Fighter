@@ -184,9 +184,9 @@ public class Enemy : MonoBehaviour
         return point + new Vector3(Random.Range(-radius, radius), Random.Range(-radius, radius), 0);
     }
 
-    private bool DetectWall()
+    private bool DetectWall(Vector2 dir, float distance)
     {
-        return Physics2D.OverlapBox(transform.position, transform.localScale, 0, collisionLayer);
+        return Physics2D.Raycast(transform.position, dir, 2 * distance, collisionLayer);
     }
 
     private StateMachine ChargeStates()
@@ -201,7 +201,7 @@ public class Enemy : MonoBehaviour
             .WithState(ChargeToPoint)
             .WithOnRun(() => timer -= Time.deltaTime)
             .WithOnRun(() => transform.position += chargeDir * chargeSpeed * Time.deltaTime)
-            .WithTransition(SetPointCharge, () => ((timer <= 0 && Vector3.Magnitude(transform.position - player.transform.position) >= 5)) || DetectWall())
+            .WithTransition(SetPointCharge, () => ((timer <= 0 && Vector3.Magnitude(transform.position - player.transform.position) >= 5)) || DetectWall(chargeDir, chargeSpeed * Time.deltaTime))
             .Build();
     }
 
@@ -229,7 +229,7 @@ public class Enemy : MonoBehaviour
 
             .WithState(GoToPoint)
             .WithOnRun(() => transform.position = Vector3.MoveTowards(transform.position, point, patrolSpeed * Time.deltaTime))
-            .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall() || Vector3.Magnitude(transform.position - point) <= 0.05f)
+            .WithTransition(SetPoint, () => Vector3.Magnitude(transform.position - originalPos) >= patrolRadius || DetectWall(point - transform.position, patrolSpeed * Time.deltaTime) || Vector3.Magnitude(transform.position - point) <= 0.05f)
             .Build();
     }
 
