@@ -92,7 +92,7 @@ public class Director : MonoBehaviour
             }while(Vector2.SqrMagnitude(spawnpoints[spawnRoll].position - _player.transform.position) < _spawnDistanceFromPlayer);
             GameObject temp = Instantiate<GameObject>(Roll(), spawnpoints[spawnRoll].position, Quaternion.identity);
             EnemiesSpawned.Add(temp);
-            temp.GetComponent<Enemy>().Bravery = 0.5f* (HyperTosses + 3)/(SuperSlams + 1);
+            temp.GetComponent<Enemy>().Bravery = Random.Range(-1.0f,1.0f) * 0.25f + 0.5f* (HyperTosses + 3)/(SuperSlams + 1);
         }
     }
 
