@@ -10149,7 +10149,7 @@ MonoBehaviour:
   _spawnDistanceFromPlayer: 5
   _enemiesWithPriority: 1
   _priorityCalculationDelay: 5
-  totalWaves: 9999
+  totalWaves: 99999
   nextLevel: MainMenu
   waveText: {fileID: 2108897841}
   levelText: {fileID: 898814184}
